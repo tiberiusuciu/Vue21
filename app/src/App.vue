@@ -19,17 +19,23 @@
         </div>
       </div>
     </template>
+    <Dealer />
     <Player />
+    <Control />
   </div>
 </template>
 
 <script>
 import Player from './components/Player.vue'
+import Dealer from './components/Dealer.vue'
+import Control from './components/Control.vue'
 
 export default {
   name: 'app',
   components: {
-    Player
+    Player,
+    Dealer,
+    Control
   },
   methods: {
     sendUserInfo() {
@@ -63,6 +69,7 @@ export default {
     padding: 200px 600px;
     box-sizing: border-box;
     background-color: #000000AA;
+    z-index: 1;
   }
 
   .form-area {

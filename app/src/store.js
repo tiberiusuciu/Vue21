@@ -14,6 +14,7 @@ export default new Vuex.Store({
     socketid: "",
     socket: io('http://localhost:3000'),
     id: null,
+    bettingAmount: 0,
     users: [],
   },
   mutations: {
@@ -21,10 +22,10 @@ export default new Vuex.Store({
       state.socket.emit('newUser', { form: state.form, socketId: state.socketid });
     },
     "SOCKET_playerinfo": (state, data) => {
-      console.log('playerinfo!', data);
+      state.id = data;
     },
     "SOCKET_users": (state, data) => {
-      console.log('users!', data);
+      state.users = data;
     },
     "SOCKET_socketid": (state, data) => {
       state.socketid = data;
