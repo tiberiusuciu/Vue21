@@ -1,0 +1,75 @@
+<template>
+  <div :class="{'red': card_identity[1] === 'H' || card_identity[1] === 'D'}" class="card">
+      <template v-if="card_identity.length <= 2">
+        <span>
+            {{ card_identity[0] }}
+        </span>
+        <i v-if="card_identity[1] === 'H'" class="fas fa-heart"></i>
+        <i v-if="card_identity[1] === 'S'" class="fas fa-spade"></i>
+        <i v-if="card_identity[1] === 'C'" class="fas fa-club"></i>
+        <i v-if="card_identity[1] === 'D'" class="fas fa-diamond"></i>
+      </template>
+      <template v-else>
+            <span>
+                {{ card_identity[0] + card_identity[1]}}
+            </span>
+            <i v-if="card_identity[2] === 'H'" class="fas fa-heart"></i>
+            <i v-if="card_identity[2] === 'S'" class="fas fa-spade"></i>
+            <i v-if="card_identity[2] === 'C'" class="fas fa-club"></i>
+            <i v-if="card_identity[2] === 'D'" class="fas fa-diamond"></i>
+      </template>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'card',
+  props: {
+    card_identity: String
+  }
+}
+</script>
+
+<style scoped>
+    .card {
+        width: 100px;
+        height: 140px;
+        background-color: #E9E9E9;
+        border-radius: 6px;
+        margin: auto;
+        text-align: center;
+        line-height: 140px;
+        font-size: 2.5em;
+        color: black;
+        border: 1px solid black;
+        font-weight: bold;
+        user-select: none;
+        cursor: pointer;
+        display: inline-block;
+        margin: 5px 10px 0px 10px;
+        /* For animation purposes */
+        /* transition: 
+            background-color .1s ease-in-out,
+            width .1s ease-in-out,
+            height .1s ease-in-out, line-height, .1s ease-in-out, color, .1s ease-in-out; */
+    }
+
+    /* For animation purposes */
+    /* 
+    .card:hover {
+        background-color: white;
+        width: 110px;
+        height: 150px;
+        line-height: 150px;
+        margin: 0px 5px 0px 5px;
+        color: red;
+    } */
+
+    .card span {
+        margin-right: -12px;
+    }
+
+    .red {
+        color: red;
+    }
+</style>
