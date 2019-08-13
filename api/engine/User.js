@@ -6,21 +6,10 @@ class User {
 		this.currentHand = 0;
 		this.hands = [];
 		this.hasbet = false;
-		// this goes in hands for each hand
-		// this.currentTurn = {
-			// cards: [],
-			// currentValue: 0,
-			// currentBet: 0,
-			// hasPlayed: false,
-			// hasHit: false,
-			// hasBust: false,
-			// hasDoubled: false,
-			// hasBlackJack: false,
-		// }
 	}
 
-	dealCards(newCards) {
-		this.hands[this.currentHand].cards.push(...newCards);
+	dealCards(newCard) {
+		this.hands[this.currentHand].cards.push(newCard);
 		this.hands[this.currentHand].currentValue = this.evaluateCards();
 
 		if (this.hands[this.currentHand].currentValue > 21) {
@@ -57,8 +46,18 @@ class User {
 	};
 
 	bet(money) {
-		this.money -= money;
-		this.hands[this.currentHand].currentBet += money;
+		this.money -= parseInt(money);
+		this.hasbet = true;
+		this.hands.push({
+			currentBet: money,
+			cards: [],
+			currentValue: 0,
+			hasPlayed: false,
+			hasHit: false,
+			hasBust: false,
+			hasDoubled: false,
+			hasBlackJack: false,
+		});
 	};
 }
 

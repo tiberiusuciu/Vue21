@@ -46,6 +46,12 @@ class Deck {
       }
       return tmp;
     }
+
+    draw() {
+      var card = this.cards[0];
+      this.cards.shift();
+      return card;
+    }
 }
 
 module.exports = Deck;

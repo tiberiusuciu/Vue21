@@ -20,6 +20,12 @@
       </div>
     </div>
 
+    <template v-if="userInfo.hasbet && userInfo.hands[0].cards">
+      <Card v-for="(card, index) in userInfo.hands[0].cards" :key="index" :card_identity="card"/>
+    </template>
+
+
+
     <!-- <Card card_identity="AS"/>
     <Card card_identity="3S"/>
     <Card card_identity="JS"/>
@@ -48,7 +54,9 @@ export default {
       this.$store.state.bettingAmount = parseInt(e.target.value);
     },
     confirmBet() {
-      this.$store.dispatch('onConfirmUserBet');
+      if (this.$store.state.bettingAmount <= this.userInfo.money) {
+        this.$store.dispatch('onConfirmUserBet');
+      }
     }
   },
   computed: {
@@ -62,6 +70,11 @@ export default {
       }
       return {
         username: '',
+        hands: [
+          {
+            cards: []
+          }
+        ]
       };
     }
   },
@@ -156,6 +169,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.15s ease-in-out;
     font-weight: bold;
+    user-select: none;
   }
   .betting-area-confirm:hover {
     background-color: white;

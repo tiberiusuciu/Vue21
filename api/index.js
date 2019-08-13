@@ -4,8 +4,9 @@ var io = require('socket.io')(http);
 
 var Game = require('./engine/Game.js');
 
-var game = new Game();
+var game = new Game(8);
 var id = 0;
+var timer;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -25,18 +26,31 @@ io.on('connection', function(socket){
   });
 
   socket.on('userbet', (data) => {
-    console.log('we have a bet', data);
-
-    // Locate player
-    // apply changes
+    // Locate player & apply changes
+    game.playerBet(data.bettingAmount, data.id);
+    
     // start timer
+    if (timer) {
+      clearTimeout(timer);
+    }
+    io.emit('gamebegintimer', 5);
+    timer = setTimeout(bettingTimeEnded, 5000);
+    
     // notify everyone
+    io.emit('users', game.users);
     
   });
 
   socket.on("disconnect", function() {
       console.log('disconnect');
   })
+
+  var bettingTimeEnded = () => {
+    console.log('TIMEOUT!');
+    timer = null;
+    game.dealCards(io)
+    // game.drawCard();
+  }
 
 });
 

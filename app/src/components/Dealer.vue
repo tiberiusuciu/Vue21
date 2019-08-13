@@ -9,6 +9,13 @@
     <div class="dealer-tag">
         Dealer
     </div>
+    <div class="timer" v-if="$store.state.gamestarttimer">
+        Game starts in {{$store.state.gamestarttime}} seconds
+    </div>
+
+    <template v-if="$store.state.dealer.hands">
+      <Card v-for="(card, index) in $store.state.dealer.hands[0].cards" :key="index" :card_identity="card"/>
+    </template>
   </div>
 </template>
 
@@ -38,5 +45,9 @@ export default {
         box-sizing: border-box;
         height: 40vh;
         position: relative;
+    }
+    .timer {
+        color: white;
+        letter-spacing: 1px;
     }
 </style>
