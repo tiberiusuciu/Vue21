@@ -14,12 +14,15 @@ export default new Vuex.Store({
     socketid: "",
     socket: io('http://localhost:3000'),
     id: null,
-    bettingAmount: 0,
+    bettingAmount: "",
     users: [],
   },
   mutations: {
     sendUserInfo(state) {
       state.socket.emit('newUser', { form: state.form, socketId: state.socketid });
+    },
+    confirmUserBet(state) {
+      state.socket.emit('userbet', { bettingAmount: state.bettingAmount, id: state.id })
     },
     "SOCKET_playerinfo": (state, data) => {
       state.id = data;
@@ -35,5 +38,8 @@ export default new Vuex.Store({
     onSendUserInfo({commit}) {
       commit('sendUserInfo');
     },
+    onConfirmUserBet({commit}) {
+      commit('confirmUserBet');
+    }
   }
 })

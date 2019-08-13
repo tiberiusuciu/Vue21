@@ -1,13 +1,13 @@
 <template>
   <div class="control">
-      <div class="betting-controls" v-if="userInfo !== null">
+      <!-- <div class="betting-controls" v-if="userInfo !== null">
           <div class="available-money">
               ${{userInfo.money}}
           </div>
           <div>
 
           </div>
-      </div>
+      </div> -->
   </div>
 </template>
 
@@ -55,9 +55,12 @@ export default {
         font-weight: normal;
         letter-spacing: 1px;
         border: 1px solid white;
-        width: 100px;
+        padding: 0px 20px;
+        box-sizing: border-box;
+        width: fit-content;
+        min-width: 100px;
         margin: auto;
-        background-color: lightslategray;
+        background-color: #222;
         border-radius: 6px;
     }
 </style>

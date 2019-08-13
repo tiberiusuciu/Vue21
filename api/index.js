@@ -24,6 +24,16 @@ io.on('connection', function(socket){
     id++;
   });
 
+  socket.on('userbet', (data) => {
+    console.log('we have a bet', data);
+
+    // Locate player
+    // apply changes
+    // start timer
+    // notify everyone
+    
+  });
+
   socket.on("disconnect", function() {
       console.log('disconnect');
   })

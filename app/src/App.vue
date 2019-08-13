@@ -21,7 +21,7 @@
     </template>
     <Dealer />
     <Player />
-    <Control />
+    <Control v-if="false" />
   </div>
 </template>
 
@@ -39,7 +39,9 @@ export default {
   },
   methods: {
     sendUserInfo() {
-      this.$store.dispatch('onSendUserInfo');
+      if (parseInt(this.$store.state.form.money) > 0 && this.$store.state.form.username !== "") {
+        this.$store.dispatch('onSendUserInfo');
+      }
     }
   },
 }

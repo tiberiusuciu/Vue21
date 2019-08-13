@@ -5,6 +5,7 @@ class User {
 		this.money = 0;
 		this.currentHand = 0;
 		this.hands = [];
+		this.hasbet = false;
 		// this goes in hands for each hand
 		// this.currentTurn = {
 			// cards: [],
