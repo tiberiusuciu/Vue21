@@ -11,21 +11,28 @@ export default new Vuex.Store({
       username: "",
       money: ""
     },
+    socketid: "",
     socket: io('http://localhost:3000'),
     id: null,
     users: [],
   },
   mutations: {
     sendUserInfo(state) {
-      state.socket.emit('newUser', state.form);
-    }
+      state.socket.emit('newUser', { form: state.form, socketId: state.socketid });
+    },
+    "SOCKET_playerinfo": (state, data) => {
+      console.log('playerinfo!', data);
+    },
+    "SOCKET_users": (state, data) => {
+      console.log('users!', data);
+    },
+    "SOCKET_socketid": (state, data) => {
+      state.socketid = data;
+    },
   },
   actions: {
     onSendUserInfo({commit}) {
       commit('sendUserInfo');
     },
-    "SOCKET_welcome": (state, data) => {
-      // console.log(data);
-    }
   }
 })
