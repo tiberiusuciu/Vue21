@@ -17,6 +17,7 @@ export default new Vuex.Store({
     bettingAmount: "",
     dealer: {},
     users: [],
+    currentUser: -1,
     gamePhase: "waitingbet",
     gamestarttime: 0,
     gamestarttimer: null
@@ -28,6 +29,18 @@ export default new Vuex.Store({
     confirmUserBet(state) {
       state.socket.emit('userbet', { bettingAmount: state.bettingAmount, id: state.id })
       // state.bettingAmount = 0;
+    },
+    userHit(state) {
+      state.socket.emit('userHit', { id: state.id });
+    },
+    userDouble(state) {
+      state.socket.emit('userDouble', { id: state.id });
+    },
+    userSplit(state) {
+      state.socket.emit('userSplit', { id: state.id });
+    },
+    userHold(state) {
+      state.socket.emit('userHold', { id: state.id });
     },
     "SOCKET_playerinfo": (state, data) => {
       state.id = data;
@@ -56,6 +69,9 @@ export default new Vuex.Store({
           state.gamestarttimer = null;
         }
       }, 1000)
+    },
+    "SOCKET_assignNextPlayer": (state, data) => {
+      state.currentUser = data;
     }
   },
   actions: {
@@ -64,6 +80,18 @@ export default new Vuex.Store({
     },
     onConfirmUserBet({commit}) {
       commit('confirmUserBet');
+    },
+    onUserHit({commit}) {
+      commit('userHit');
+    },
+    onUserDouble({commit}) {
+      commit('userDouble');
+    },
+    onUserSplit({commit}) {
+      commit('userSplit');
+    },
+    onUserHold({commit}) {
+      commit('userHold');
     }
   }
 })

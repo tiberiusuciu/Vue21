@@ -7,7 +7,7 @@
         Game starts in {{$store.state.gamestarttime}} seconds
     </div>
 
-    <template v-if="$store.state.gamePhase === 'dealingCards' && $store.state.dealer.hands">    
+    <template v-if="($store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay') && $store.state.dealer.hands">    
         <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
             <template v-if="index == 0">
                 <Card :key="index" :card_identity="card"/>

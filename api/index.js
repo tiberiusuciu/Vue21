@@ -42,6 +42,19 @@ io.on('connection', function(socket){
     
   });
 
+  socket.on('userHit', (data) => {
+    console.log('userHit');
+  });
+  socket.on('userDouble', (data) => {
+    console.log('userDouble');
+  });
+  socket.on('userSplit', (data) => {
+    console.log('userSplit');
+  });
+  socket.on('userHold', (data) => {
+    console.log('userHold');
+  });
+
   socket.on("disconnect", function() {
       console.log('disconnect');
   })

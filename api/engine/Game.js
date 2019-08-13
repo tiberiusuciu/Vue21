@@ -6,7 +6,7 @@ class Game {
 		this.deck = new Deck(deckCount);
 		this.users = [];
 		this.dealer = new User('Dealer', -1);
-		this.currentPlayer = 0;
+		this.currentPlayer = -1;
 		this.currentPhase = 'waitingbet';
 		// this.currentUserId = -1;
 		// this.secondsPassed = 0;
@@ -40,8 +40,10 @@ class Game {
 		var done = false;
 		var interval = setInterval(() => {
 			if (!done && currentPlayer < this.users.length) {
-				this.users[currentPlayer].dealCards(this.deck.draw());
-				io.emit('users', this.users);
+				if (this.users[currentPlayer].hasbet) {
+					this.users[currentPlayer].dealCards(this.deck.draw());
+					io.emit('users', this.users);
+				}
 				currentPlayer++;
 			}
 			else if (!done && currentPlayer >= this.users.length && !secondDeal) {
@@ -68,9 +70,23 @@ class Game {
 				io.emit('dealer', this.dealer);
 				// emit for all about the dealer
 				clearInterval(interval);
+
+				io.emit('gamephasechange', 'userplay');
+				io.emit('assignNextPlayer', this.findNextPlayer());
 				// notify that player ones needs to play
 			}
 		}, 500);
+	}
+
+	findNextPlayer() {
+		this.currentPlayer++;
+		var isRoundOver = false;
+		for (var i = this.currentPlayer; i < this.users.length; i++) {
+			if (this.users[i].hasbet) {
+				this.currentPlayer = i;
+				return i;
+			}
+		}
 	}
 
 }

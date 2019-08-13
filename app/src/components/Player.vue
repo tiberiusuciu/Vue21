@@ -4,7 +4,7 @@
       {{ userInfo.username }}
     </div>
 
-    <div v-if="!userInfo.hasbet && userInfo.username !== ''">
+    <div v-if="($store.state.gamePhase === 'waitingbet' || $store.state.gamePhase === 'aboutToStart') && (!userInfo.hasbet && userInfo.username !== '')">
       <div class="betting-area-your-money">
         <div class="available-money-tag">Your Money</div>
         <span class="money-value">
@@ -20,8 +20,15 @@
       </div>
     </div>
 
-    <template v-if="userInfo.hasbet && userInfo.hands[0].cards">
-      <Card v-for="(card, index) in userInfo.hands[0].cards" :key="index" :card_identity="card"/>
+    <template v-if="userInfo.hasbet && ($store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'dealingCards')">
+      <template v-for="(hand, index) in userInfo.hands">
+        <div :key="index" class="hand-area" v-if="hand.cards.length > 0">
+          <div class="floating-value">
+            <div class="aligned-content">{{hand.currentValue}}</div>
+          </div>
+          <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -74,7 +81,7 @@ export default {
 
 <style scoped>
   .hand {
-    padding-top: 100px;
+    padding-top: 50px;
     box-sizing: border-box;
     height: 40vh;
     border-top: 1px solid #040;
@@ -164,5 +171,34 @@ export default {
   }
   .betting-area-confirm:hover {
     background-color: white;
+  }
+
+  .hand-area {
+    border: 1px solid white;
+    display: inline-block;
+    padding: 50px;
+    position: relative;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  .floating-value {
+    position: absolute;
+    top: -30px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+  }
+
+  .aligned-content {
+    width: 100px;
+    margin: auto;
+    font-size: 2.5em;
+    border: 1px solid white;
+    background-color: #050;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
   }
 </style>

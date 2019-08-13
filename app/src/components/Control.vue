@@ -1,13 +1,18 @@
 <template>
-  <div class="control">
-      <!-- <div class="betting-controls" v-if="userInfo !== null">
-          <div class="available-money">
-              ${{userInfo.money}}
-          </div>
-          <div>
+  <div class="control" >
 
-          </div>
-      </div> -->
+    <div class="buttoncontrol hit" @click="hit">
+      Hit
+    </div>
+    <div class="buttoncontrol double" @click="double">
+      Double
+    </div>
+    <div class="buttoncontrol split" @click="split">
+      Split
+    </div>
+    <div class="buttoncontrol hold" @click="hold">
+      Hold
+    </div>
   </div>
 </template>
 
@@ -15,6 +20,20 @@
 
 export default {
   name: 'control',
+  methods: {
+    hit() {
+      this.$store.dispatch('onUserHit');
+    },
+    double() {
+      this.$store.dispatch('onUserDouble');
+    },
+    split() {
+      this.$store.dispatch('onUserSplit');
+    },
+    hold() {
+      this.$store.dispatch('onUserHold');
+    }
+  },
   computed: {
     userInfo() {
       if (this.$store.state.id !== null) {
@@ -41,26 +60,43 @@ export default {
         background-color: #040;
     }
 
-    .betting-controls {
-        position: absolute;
-        /* background-color: #FFF1; */
-        height: 60px;
-        width: 100%;
-        top: -30px;
-        line-height: 60px;
+    .buttoncontrol {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      border-radius: 150px;
+      margin-left: 40px;
+      margin-right: 40px;
+      margin-top: -50px;
+      border: 10px solid #040;
+      background-color: white;
+      line-height: 150px;
+      font-weight: bold;
+      font-size: 1.75em;
+      color: white;
+      cursor: pointer;
+      transition: border-color .1s ease-in-out;
+      user-select: none;
     }
 
-    .available-money {
-        color: white;
-        font-weight: normal;
-        letter-spacing: 1px;
-        border: 1px solid white;
-        padding: 0px 20px;
-        box-sizing: border-box;
-        width: fit-content;
-        min-width: 100px;
-        margin: auto;
-        background-color: #222;
-        border-radius: 6px;
+    .buttoncontrol:hover {
+      border: 10px solid white;
+    }
+
+    .hit {
+      background: linear-gradient(to left, #33ccff 0%, #ff99cc 100%);
+      /* background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%); */
+    }
+
+    .double {
+      background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    }
+
+    .split {
+      background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+    }
+
+    .hold {
+      background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
     }
 </style>

@@ -4,7 +4,7 @@
       <div class="overlay-area">
         <div class="form-area">
           <h1>Welcome to Vue21</h1>
-          <p>Before going any further, please identify yourself with a username and specify how much money would you like to start out with</p>
+          <p>Before going any further, please identify yourself with a username and specify how much money would you like to start out initially</p>
           <div class="username-area input-area">
             <div><i class="fas fa-user"></i></div>
             <input type="text" placeholder="Username" v-model="$store.state.form.username" />
@@ -21,7 +21,7 @@
     </template>
     <Dealer />
     <Player />
-    <Control v-if="false" />
+    <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
   </div>
 </template>
 
@@ -58,6 +58,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #050;
+    /* background-color: lightblue; */
     height: 100vh;
     /* padding: 30px; */
     box-sizing: border-box;
