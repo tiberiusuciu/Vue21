@@ -17,6 +17,7 @@ export default new Vuex.Store({
     bettingAmount: "",
     dealer: {},
     users: [],
+    gamePhase: "waitingbet",
     gamestarttime: 0,
     gamestarttimer: null
   },
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     "SOCKET_socketid": (state, data) => {
       state.socketid = data;
+    },
+    "SOCKET_gamephasechange": (state, data) => {
+      state.gamePhase = data;
     },
     "SOCKET_gamebegintimer": (state, data) => {
       state.gamestarttime = data

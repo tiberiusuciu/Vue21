@@ -23,15 +23,6 @@
     <template v-if="userInfo.hasbet && userInfo.hands[0].cards">
       <Card v-for="(card, index) in userInfo.hands[0].cards" :key="index" :card_identity="card"/>
     </template>
-
-
-
-    <!-- <Card card_identity="AS"/>
-    <Card card_identity="3S"/>
-    <Card card_identity="JS"/>
-    <Card card_identity="QH"/>
-    <Card card_identity="KD"/>
-    <Card card_identity="10C"/> -->
   </div>
 </template>
 

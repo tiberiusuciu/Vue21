@@ -34,6 +34,7 @@ io.on('connection', function(socket){
       clearTimeout(timer);
     }
     io.emit('gamebegintimer', 5);
+    io.emit('gamephasechange', 'aboutToStart');
     timer = setTimeout(bettingTimeEnded, 5000);
     
     // notify everyone
@@ -48,6 +49,7 @@ io.on('connection', function(socket){
   var bettingTimeEnded = () => {
     console.log('TIMEOUT!');
     timer = null;
+    io.emit('gamephasechange', 'dealingCards');
     game.dealCards(io)
     // game.drawCard();
   }

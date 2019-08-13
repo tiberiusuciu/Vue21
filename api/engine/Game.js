@@ -8,8 +8,6 @@ class Game {
 		this.dealer = new User('Dealer', -1);
 		this.currentPlayer = 0;
 		this.currentPhase = 'waitingbet';
-		// this.currentPhase = '';
-		// this.firstCardDealt = false;
 		// this.currentUserId = -1;
 		// this.secondsPassed = 0;
 	}

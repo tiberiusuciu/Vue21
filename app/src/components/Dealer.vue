@@ -1,21 +1,31 @@
 <template>
   <div class="hand">
-    <!-- <Card card_identity="AS"/>
-    <Card card_identity="3S"/>
-    <Card card_identity="JS"/>
-    <Card card_identity="QH"/>
-    <Card card_identity="KD"/>
-    <Card card_identity="10C"/> -->
     <div class="dealer-tag">
         Dealer
     </div>
-    <div class="timer" v-if="$store.state.gamestarttimer">
+    <div class="timer" v-if="$store.state.gamePhase === 'aboutToStart'">
         Game starts in {{$store.state.gamestarttime}} seconds
     </div>
 
-    <template v-if="$store.state.dealer.hands">
-      <Card v-for="(card, index) in $store.state.dealer.hands[0].cards" :key="index" :card_identity="card"/>
+    <template v-if="$store.state.gamePhase === 'dealingCards' && $store.state.dealer.hands">    
+        <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
+            <template v-if="index == 0">
+                <Card :key="index" :card_identity="card"/>
+            </template>
+            <template v-else-if="index == 1">
+                <template v-if="$store.state.gamePhase !== 'revealCard'">
+                    <Card :key="index" :card_identity="'hidden'"/>
+                </template>
+                <template v-else>
+                    <Card :key="index" :card_identity="card" />
+                </template>
+            </template>
+            <template v-else>
+                <Card :key="index" :card_identity="card"/>
+            </template>
+        </template>
     </template>
+
   </div>
 </template>
 
