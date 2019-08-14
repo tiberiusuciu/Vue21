@@ -1,40 +1,37 @@
 <template>
-  <div class="hand">
-    <div class="dealer-tag">
-        Dealer
-    </div>
-    <div class="timer" v-if="$store.state.gamePhase === 'aboutToStart'">
-        Game starts in {{$store.state.gamestarttime}} seconds
-    </div>
+    <div class="hand">
+        <div class="dealer-tag">
+            Dealer
+        </div>
+        <div class="timer" v-if="$store.state.gamePhase === 'aboutToStart'">
+            Game starts in {{$store.state.gamestarttime}} seconds
+        </div>
 
-    <template v-if="(
-        $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards') && $store.state.dealer.hands">  
-        <div class="hand-area">
-            <div class="floating-value">
-                <div class="aligned-content">{{ transformedValue }}</div>
-            </div>
-
-
-            <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
-                <template v-if="index == 0">
-                    <Card :key="index" :card_identity="card"/>
-                </template>
-                <template v-else-if="index == 1">
-                    <template v-if="$store.state.gamePhase !== 'revealCard' && $store.state.gamePhase !== 'giveRewards'">
-                        <Card :key="index" :card_identity="'hidden'"/>
+        <template v-if="(
+            $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards') && $store.state.dealer.hands.length > 0">  
+            <div class="hand-area">
+                <div class="floating-value">
+                    <div class="aligned-content">{{ transformedValue }}</div>
+                </div>
+                <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
+                    <template v-if="index == 0">
+                        <Card :key="index" :card_identity="card"/>
+                    </template>
+                    <template v-else-if="index == 1">
+                        <template v-if="$store.state.gamePhase !== 'revealCard' && $store.state.gamePhase !== 'giveRewards'">
+                            <Card :key="index" :card_identity="'hidden'"/>
+                        </template>
+                        <template v-else>
+                            <Card :key="index" :card_identity="card" />
+                        </template>
                     </template>
                     <template v-else>
-                        <Card :key="index" :card_identity="card" />
+                        <Card :key="index" :card_identity="card"/>
                     </template>
                 </template>
-                <template v-else>
-                    <Card :key="index" :card_identity="card"/>
-                </template>
-            </template>
-        </div>
-    </template>
-
-  </div>
+            </div>
+        </template>
+    </div>
 </template>
 
 <script>
@@ -51,15 +48,20 @@ export default {
                 return this.$store.state.dealer.hands[0].currentValue;
             }
             else {
-                var card = this.$store.state.dealer.hands[0].cards[0];
-                if (card.charAt(0) === 'A') {
-                    return 11;
-                }
-                else if (card.charAt(0) === 'K' || card.charAt(0) === 'Q' || card.charAt(0) === 'J'){
-                    return 10;
+                if (this.$store.state.dealer.hands.length > 0) {
+                    var card = this.$store.state.dealer.hands[0].cards[0];
+                    if (card.charAt(0) === 'A') {
+                        return 11;
+                    }
+                    else if (card.charAt(0) === 'K' || card.charAt(0) === 'Q' || card.charAt(0) === 'J' || card.charAt(0) === '1'){
+                        return 10;
+                    }
+                    else {
+                        return card.charAt(0);
+                    }
                 }
                 else {
-                    return card.charAt(0);
+                    return 0;
                 }
             }
         }
