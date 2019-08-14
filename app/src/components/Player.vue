@@ -1,5 +1,5 @@
 <template>
-  <div class="hand">
+  <div class="hand" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
     <div class="username-tag">
       <div>
         {{ userInfo.username }}
@@ -29,11 +29,11 @@
       <template v-for="(hand, index) in userInfo.hands">
         <div :key="index" class="hand-area" v-if="hand.cards.length > 0">
           <div class="floating-value">
-            <div class="aligned-content">{{hand.currentValue}}</div>
+            <div class="aligned-content" :class="{'unactive': $store.state.currentUser !== $store.state.id}">{{hand.currentValue}}</div>
           </div>
           <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
           <div class="floating-betting-box">
-            <div class="betting-box">
+            <div class="betting-box" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
               <i class="far fa-dollar-sign" style="color:lime;"></i> {{ hand.currentBet }}
             </div>
           </div>
@@ -99,6 +99,7 @@ export default {
     height: 40vh;
     border-top: 1px solid #040;
     position: relative;
+    background-color: #050;
   }
   .username-tag {
     color: white;
@@ -125,10 +126,11 @@ export default {
 
   .available-money-tag {
     position: absolute;
-    background-color: #050;
+    /* background-color: #050; */
     top: -20px;
     left: 11px;
     padding: 10px 15px;
+    background-color: #040;
   }
 
   .money-value {
@@ -234,5 +236,9 @@ export default {
     border-radius: 50px;
     margin: auto;
     width: fit-content;
+  }
+
+  .unactive {
+    background-color: #040;
   }
 </style>

@@ -19,6 +19,7 @@
       <Dealer />
       <Player />
       <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
+      <OtherPlayer />
     </template>
   </div>
 </template>
@@ -27,13 +28,15 @@
 import Player from './components/Player.vue'
 import Dealer from './components/Dealer.vue'
 import Control from './components/Control.vue'
+import OtherPlayer from './components/OtherPlayer.vue'
 
 export default {
   name: 'app',
   components: {
     Player,
     Dealer,
-    Control
+    Control,
+    OtherPlayer
   },
   methods: {
     sendUserInfo() {
@@ -55,10 +58,11 @@ export default {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #050;
+    background-color: #040;
     height: 100vh;
     box-sizing: border-box;
     text-align: center;
+    position: relative;
   }
 
   .overlay-area {

@@ -8,7 +8,7 @@
       </div>
     </template>
     <template v-else>
-      <div :class="{'red': card_identity[1] === 'H' || card_identity[1] === 'D'}" class="card">
+      <div :class="{'red': card_identity[1] === 'H' || card_identity[1] === 'D', 'showcase': is_showcase}" class="card">
           <template v-if="card_identity.length <= 2">
             <span>
                 {{ card_identity[0] }}
@@ -36,7 +36,8 @@
 export default {
   name: 'card',
   props: {
-    card_identity: String
+    card_identity: String,
+    is_showcase: Boolean
   }
 }
 </script>
@@ -95,5 +96,12 @@ export default {
 
     .red {
         color: red;
+    }
+
+    .showcase {
+      line-height: 65px;
+      margin-left: -45px;
+      text-align: left;
+      padding-left: 4px;
     }
 </style>

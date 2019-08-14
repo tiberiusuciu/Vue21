@@ -6,7 +6,7 @@ class Game {
 		this.deck = new Deck(deckCount);
 		this.users = [];
 		this.dealer = new User('Dealer', -1);
-		this.currentPlayer = 0;
+		this.currentPlayer = -1;
 		this.currentPhase = 'waitingbet';
 		// this.currentUserId = -1;
 		// this.secondsPassed = 0;
@@ -183,6 +183,9 @@ class Game {
 	}
 
 	dealerPlay(io) {
+		this.currentPlayer = -1;
+		io.emit('assignNextPlayer', this.currentPlayer);
+
 		var interval = setInterval(() => {
 			// check for soft 17?
 			if (this.dealer.hands[0].currentValue < 17) {

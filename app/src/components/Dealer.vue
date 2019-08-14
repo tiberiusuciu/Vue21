@@ -1,5 +1,5 @@
 <template>
-    <div class="hand">
+    <div class="hand" :class="{'unactive': $store.state.gamePhase === 'waitingbet'}">
         <div class="dealer-tag">
             Dealer
         </div>
@@ -31,6 +31,10 @@
                 </template>
             </div>
         </template>
+
+        <div class="anouncement" v-if="$store.state.currentUser != -1 && $store.state.currentUser !== $store.state.id && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
+            Waiting on {{ $store.state.users[$store.state.currentUser].username }}'s turn
+        </div>
     </div>
 </template>
 
@@ -84,6 +88,7 @@ export default {
         box-sizing: border-box;
         height: 40vh;
         position: relative;
+        background-color: #050;
     }
     .timer {
         color: white;
@@ -117,5 +122,16 @@ export default {
         color: white;
         padding: 10px;
         border-radius: 6px;
+    }
+
+    .unactive {
+        background-color: #040;
+    }
+
+    .anouncement {
+        color: white;
+        font-size: 1.25em;
+        margin-top: 20px;
+        letter-spacing: 1px;
     }
 </style>
