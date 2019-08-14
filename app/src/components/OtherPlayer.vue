@@ -84,6 +84,5 @@ export default {
         display: inline-block;
         line-height: 60px;
         letter-spacing: 1px;
-        /* opacity: .75; */
     }
 </style>

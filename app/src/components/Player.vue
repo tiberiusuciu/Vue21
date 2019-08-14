@@ -9,7 +9,11 @@
       </div>
     </div>
 
-    <div v-if="($store.state.gamePhase === 'waitingbet' || $store.state.gamePhase === 'aboutToStart') && (!userInfo.hasbet && userInfo.username !== '')">
+    <div v-if="(
+      $store.state.gamePhase === 'waitingbet' || 
+      $store.state.gamePhase === 'aboutToStart') &&
+      (!userInfo.hasbet && userInfo.username !== '') &&
+      userInfo.money > 0">
       <div class="betting-area-your-money">
         <div class="available-money-tag">Your Money</div>
         <span class="money-value">
@@ -23,6 +27,15 @@
       <div class="betting-area-confirm" @click="confirmBet">
         Confirm
       </div>
+    </div>
+
+    <div v-if="!(userInfo.money > 0) && !userInfo.hasbet" class="game-over">
+      <div class="game-over-label-area">
+        <dir class="game-over-label">
+          Game Over
+        </dir>
+      </div>
+      No more money, thank you for playing! Refresh this page to start again!
     </div>
 
     <template v-if="userInfo.hasbet && ($store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards')">
@@ -240,5 +253,34 @@ export default {
 
   .unactive {
     background-color: #040;
+  }
+
+  .game-over {
+    color: white;
+    font-weight: normal;
+    letter-spacing: 1px;
+    font-size: 1.5em;
+    width: 500px;
+    margin: auto;
+    padding: 50px;
+    border: 2px solid white;
+    border-radius: 6px;
+    position: relative;
+    user-select: none;
+    /* box-sizing: border-box; */
+  }
+
+  .game-over-label-area {
+    position: absolute;
+    top: -15px;
+    left: 0px;
+    /* padding: 0px 50px; */
+    width: 100%;
+  }
+
+  .game-over-label {
+    background-color: #040;
+    width: 160px;
+    margin: auto;
   }
 </style>
