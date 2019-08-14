@@ -19,9 +19,11 @@
         </div>
       </div>
     </template>
-    <Dealer />
-    <Player />
-    <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
+    <template v-if="$store.state.id !== null">
+      <Dealer />
+      <Player />
+      <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
+    </template>
   </div>
 </template>
 
@@ -43,7 +45,7 @@ export default {
         this.$store.dispatch('onSendUserInfo');
       }
     }
-  },
+  }
 }
 </script>
 

@@ -54,6 +54,9 @@ export default {
     confirmBet() {
       if (this.$store.state.bettingAmount <= this.userInfo.money) {
         this.$store.dispatch('onConfirmUserBet');
+        if (this.$store.state.bettingAmount > this.userInfo.money - this.$store.state.bettingAmount) {
+            this.$store.state.bettingAmount = 0;
+        }
       }
     }
   },
