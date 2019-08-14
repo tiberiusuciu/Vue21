@@ -140,6 +140,7 @@ export default {
     font-weight: bold;
     letter-spacing: 1px;
     display: block;
+    user-select: none;
   }
 
   .submit-area:hover {

@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <template v-if="userInfo.hasbet && ($store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'dealingCards')">
+    <template v-if="userInfo.hasbet && ($store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards')">
       <template v-for="(hand, index) in userInfo.hands">
         <div :key="index" class="hand-area" v-if="hand.cards.length > 0">
           <div class="floating-value">

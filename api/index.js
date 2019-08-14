@@ -43,7 +43,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('userHit', (data) => {
-    console.log('userHit');
+    game.playerHit(data.id, io);
   });
   socket.on('userDouble', (data) => {
     console.log('userDouble');
@@ -60,7 +60,6 @@ io.on('connection', function(socket){
   })
 
   var bettingTimeEnded = () => {
-    console.log('TIMEOUT!');
     timer = null;
     io.emit('gamephasechange', 'dealingCards');
     game.dealCards(io)

@@ -6,7 +6,7 @@ class Game {
 		this.deck = new Deck(deckCount);
 		this.users = [];
 		this.dealer = new User('Dealer', -1);
-		this.currentPlayer = -1;
+		this.currentPlayer = 0;
 		this.currentPhase = 'waitingbet';
 		// this.currentUserId = -1;
 		// this.secondsPassed = 0;
@@ -79,14 +79,75 @@ class Game {
 	}
 
 	findNextPlayer() {
-		this.currentPlayer++;
-		var isRoundOver = false;
-		for (var i = this.currentPlayer; i < this.users.length; i++) {
+		for (var i = 0; i < this.users.length; i++) {
 			if (this.users[i].hasbet) {
-				this.currentPlayer = i;
-				return i;
+				if (!this.users[i].hands[this.users[i].currentHand].hasPlayed) {
+					this.currentPlayer = i;
+					return i;
+				}
 			}
 		}
+		return -1;
+	}
+
+	playerHit(playerID, io) {
+		var player = this.users[this.locatePlayer(playerID)];
+		
+		player.dealCards(this.deck.draw());
+
+		if (player.hands[player.currentHand].hasBust) {
+			if (player.currentHand + 1 >= player.hands.length) {
+				var nextPlayer = this.findNextPlayer();
+				if (nextPlayer >= 0) {
+					io.emit('assignNextPlayer', this.findNextPlayer());
+				}
+				else {
+					io.emit('gamephasechange', 'revealCard');
+					setTimeout(() => {
+						this.dealerPlay(io);
+					}, 500)
+				}
+			}
+			else {
+				player.currentHand++;
+				io.emit('users', this.users);
+			}
+			
+		}
+
+		io.emit('users', this.users);
+	}
+
+	dealerPlay(io) {
+		var interval = setInterval(() => {
+			// check for soft 17?
+			if (this.dealer.hands[0].currentValue < 17) {
+				this.dealer.dealCards(this.deck.draw());
+				io.emit('dealer', this.dealer);
+			}
+			else {
+				io.emit('gamephasechange', 'giveRewards');
+				setTimeout(() => {
+					// cleanup players and dealer
+					this.cleanupBoard();
+					io.emit('users', this.users);
+					io.emit('dealer', this.dealer);
+					io.emit('gamephasechange', 'waitingbet');
+				}, 5000)
+				clearInterval(interval);
+			}
+		}, 500)
+	}
+
+	cleanupBoard() {
+		for (var i = 0; i < this.users.length; i++) {
+			this.users[i].hands = [];
+			this.users[i].currentHand = 0;
+			this.users[i].hasbet = false;
+		}
+		this.dealer.hands = [];
+		this.dealer.currentHand = 0;
+		this.dealer.hasbet = false;
 	}
 
 }

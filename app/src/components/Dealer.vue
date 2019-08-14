@@ -7,13 +7,14 @@
         Game starts in {{$store.state.gamestarttime}} seconds
     </div>
 
-    <template v-if="($store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay') && $store.state.dealer.hands">    
+    <template v-if="(
+        $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards') && $store.state.dealer.hands">    
         <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
             <template v-if="index == 0">
                 <Card :key="index" :card_identity="card"/>
             </template>
             <template v-else-if="index == 1">
-                <template v-if="$store.state.gamePhase !== 'revealCard'">
+                <template v-if="$store.state.gamePhase !== 'revealCard' && $store.state.gamePhase !== 'giveRewards'">
                     <Card :key="index" :card_identity="'hidden'"/>
                 </template>
                 <template v-else>
