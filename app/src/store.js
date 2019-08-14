@@ -8,8 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     form: {
-      username: "",
-      money: ""
+      username: ""
     },
     socketid: "",
     socket: io('http://localhost:3000'),

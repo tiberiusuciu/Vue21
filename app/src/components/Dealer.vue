@@ -78,7 +78,7 @@ export default {
     }
 
     .hand {
-        padding-top: 100px;
+        padding-top: 75px;
         box-sizing: border-box;
         height: 40vh;
         position: relative;

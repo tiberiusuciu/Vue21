@@ -14,7 +14,7 @@ class Game {
 
 	addNewUser(info, id) {
 		var user = new User(info.username, id);
-		user.money = info.money;
+		user.money = 100;
 		this.users.push(user);
 	}
 

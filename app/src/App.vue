@@ -4,15 +4,15 @@
       <div class="overlay-area">
         <div class="form-area">
           <h1>Welcome to Vue21</h1>
-          <p>Before going any further, please identify yourself with a username and specify how much money would you like to start out initially</p>
+          <p>Before going any further, please identify yourself with a username</p>
           <div class="username-area input-area">
             <div><i class="fas fa-user"></i></div>
-            <input type="text" placeholder="Username" v-model="$store.state.form.username" />
+            <input type="text" placeholder="Username" v-model="$store.state.form.username" @keyup.enter="sendUserInfo" />
           </div>
-          <div class="money-area input-area">
+          <!-- <div class="money-area input-area">
             <div><i class="fas fa-dollar-sign"></i></div>
             <input type="number" placeholder="100" v-model="$store.state.form.money" />
-          </div>
+          </div> -->
           <div class="submit-area input-area" @click="sendUserInfo">
             Submit
           </div>
@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     sendUserInfo() {
-      if (parseInt(this.$store.state.form.money) > 0 && this.$store.state.form.username !== "") {
+      if (this.$store.state.form.username !== "") {
         this.$store.dispatch('onSendUserInfo');
       }
     }
@@ -80,7 +80,7 @@ export default {
     width: 100%;
     height: 100%;
     border-radius: 6px;
-    padding: 50px 100px;
+    padding: 125px 100px;
     box-sizing: border-box;
     max-width: 635px;
     min-width: 556px;
@@ -92,6 +92,7 @@ export default {
   .form-area p {
     margin: auto;
     margin-top: 40px;
+    padding: 0px 80px;
   }
 
   .input-area div, .input-area input {
