@@ -46,7 +46,7 @@ io.on('connection', function(socket){
     game.playerHit(data.id, io);
   });
   socket.on('userDouble', (data) => {
-    console.log('userDouble');
+    game.playerDouble(data.id, io);
   });
   socket.on('userSplit', (data) => {
     console.log('userSplit');

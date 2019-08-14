@@ -14,11 +14,9 @@ class User {
 
 		if (this.hands[this.currentHand].currentValue > 21) {
 			this.hands[this.currentHand].hasBust = true;
-			this.hands[this.currentHand].hasPlayed = true;
 		}
 		else if (this.hands[this.currentHand].currentValue == 21 && this.hands[this.currentHand].cards.length == 2) {
 			this.hands[this.currentHand].hasBlackJack = true;
-			this.hands[this.currentHand].hasPlayed = true;
 		}
 	};
 

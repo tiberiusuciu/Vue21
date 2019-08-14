@@ -94,6 +94,8 @@ class Game {
 		var player = this.users[this.locatePlayer(playerID)];
 		
 		player.dealCards(this.deck.draw());
+		player.hands[player.currentHand].hasHit = true;
+		player.hands[player.currentHand].hasPlayed = true;
 
 		if (player.hands[player.currentHand].hasBust) {
 			if (player.currentHand + 1 >= player.hands.length) {
@@ -118,6 +120,49 @@ class Game {
 		io.emit('users', this.users);
 	}
 
+	playerDouble(playerID, io) {
+		var player = this.users[this.locatePlayer(playerID)];
+		
+		// Doubling logic
+		var bettingAmount = player.hands[player.currentHand].currentBet;
+
+		player.money -= bettingAmount;
+		player.hands[player.currentHand].currentBet += bettingAmount;
+
+		player.dealCards(this.deck.draw());
+		player.hands[player.currentHand].hasPlayed = true;
+		player.hands[player.currentHand].hasDoubled = true;
+
+		// Going directly to next player or hand
+
+		if (player.currentHand + 1 >= player.hands.length) {
+			console.log('did we even get here?');
+			
+			var nextPlayer = this.findNextPlayer();
+			if (nextPlayer >= 0) {
+				console.log('YES TIME TO ASSIGN', nextPlayer);
+				
+				io.emit('assignNextPlayer', this.findNextPlayer());
+			}
+			else {
+				console.log('thats it, switching to dealer');
+				
+				io.emit('gamephasechange', 'revealCard');
+				setTimeout(() => {
+					this.dealerPlay(io);
+				}, 500)
+			}
+		}
+		else {
+			console.log('somehow we are here??');
+			
+			player.currentHand++;
+			io.emit('users', this.users);
+		}
+			
+		io.emit('users', this.users);
+	}
+
 	dealerPlay(io) {
 		var interval = setInterval(() => {
 			// check for soft 17?
@@ -130,13 +175,13 @@ class Game {
 				setTimeout(() => {
 					// cleanup players and dealer
 					this.cleanupBoard();
+					io.emit('gamephasechange', 'waitingbet');
 					io.emit('users', this.users);
 					io.emit('dealer', this.dealer);
-					io.emit('gamephasechange', 'waitingbet');
 				}, 5000)
 				clearInterval(interval);
 			}
-		}, 500)
+		}, 750)
 	}
 
 	cleanupBoard() {
