@@ -191,6 +191,39 @@ class Game {
 			}
 			else {
 				io.emit('gamephasechange', 'giveRewards');
+
+				// give money to users
+					// loop through all player
+				for (var i = 0; i < this.users.length; i++) {
+					if (this.users[i].hasbet) {
+						var player = this.users[i];
+						var cashStack = 0;
+						// loop through their hands
+						for (var j = 0; j < player.hands.length; j++) {
+							if (player.hands[j].currentValue <= 21 && (player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
+								console.log('normal handout');
+								
+								cashStack += player.hands[j].currentBet * 2
+							}
+							if (player.hands[j].currentValue == this.dealer.hands[0].currentValue) {
+								console.log('its a tie');
+								cashStack += player.hands[j].currentBet;
+							}
+							if (player.hands[j].hasBlackJack && !this.dealer.hands[0].hasBlackJack) {
+								console.log('blackjack!');
+								cashStack += player.hands[j].currentBet * 2.5;
+							}
+
+						}
+
+						player.money += cashStack;
+					}
+				}
+
+
+				// notify users
+				io.emit('users', this.users);
+
 				setTimeout(() => {
 					// cleanup players and dealer
 					this.cleanupBoard();

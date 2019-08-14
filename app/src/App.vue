@@ -9,10 +9,6 @@
             <div><i class="fas fa-user"></i></div>
             <input type="text" placeholder="Username" v-model="$store.state.form.username" @keyup.enter="sendUserInfo" />
           </div>
-          <!-- <div class="money-area input-area">
-            <div><i class="fas fa-dollar-sign"></i></div>
-            <input type="number" placeholder="100" v-model="$store.state.form.money" />
-          </div> -->
           <div class="submit-area input-area" @click="sendUserInfo">
             Submit
           </div>
@@ -60,9 +56,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #050;
-    /* background-color: lightblue; */
     height: 100vh;
-    /* padding: 30px; */
     box-sizing: border-box;
     text-align: center;
   }
