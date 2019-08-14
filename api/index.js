@@ -52,7 +52,7 @@ io.on('connection', function(socket){
     console.log('userSplit');
   });
   socket.on('userHold', (data) => {
-    console.log('userHold');
+    game.playerHold(data.id, io);
   });
 
   socket.on("disconnect", function() {

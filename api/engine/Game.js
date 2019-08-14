@@ -136,17 +136,11 @@ class Game {
 		// Going directly to next player or hand
 
 		if (player.currentHand + 1 >= player.hands.length) {
-			console.log('did we even get here?');
-			
 			var nextPlayer = this.findNextPlayer();
 			if (nextPlayer >= 0) {
-				console.log('YES TIME TO ASSIGN', nextPlayer);
-				
 				io.emit('assignNextPlayer', this.findNextPlayer());
 			}
 			else {
-				console.log('thats it, switching to dealer');
-				
 				io.emit('gamephasechange', 'revealCard');
 				setTimeout(() => {
 					this.dealerPlay(io);
@@ -154,8 +148,33 @@ class Game {
 			}
 		}
 		else {
-			console.log('somehow we are here??');
+			player.currentHand++;
+			io.emit('users', this.users);
+		}
 			
+		io.emit('users', this.users);
+	}
+
+	playerHold(playerID, io) {
+		var player = this.users[this.locatePlayer(playerID)];
+		
+		player.hands[player.currentHand].hasPlayed = true;
+
+		// Going directly to next player or hand
+
+		if (player.currentHand + 1 >= player.hands.length) {
+			var nextPlayer = this.findNextPlayer();
+			if (nextPlayer >= 0) {
+				io.emit('assignNextPlayer', this.findNextPlayer());
+			}
+			else {
+				io.emit('gamephasechange', 'revealCard');
+				setTimeout(() => {
+					this.dealerPlay(io);
+				}, 500)
+			}
+		}
+		else {
 			player.currentHand++;
 			io.emit('users', this.users);
 		}
