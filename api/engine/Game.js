@@ -81,6 +81,7 @@ class Game {
 				}
 				else {
 					io.emit('gamephasechange', 'userplay');
+					io.emit('startUserTimeout', 15000);
 					io.emit('assignNextPlayer', this.findNextPlayer());
 				}
 
@@ -108,6 +109,8 @@ class Game {
 		player.hands[player.currentHand].hasHit = true;
 		player.hands[player.currentHand].hasPlayed = true;
 
+		var startTimer = true;
+
 		if (player.hands[player.currentHand].hasBust) {
 			if (player.currentHand + 1 >= player.hands.length) {
 				var nextPlayer = this.findNextPlayer();
@@ -116,6 +119,7 @@ class Game {
 				}
 				else {
 					io.emit('gamephasechange', 'revealCard');
+					startTimer = false;
 					setTimeout(() => {
 						this.dealerPlay(io);
 					}, 500)
@@ -127,13 +131,17 @@ class Game {
 			}
 			
 		}
-
+		if (startTimer) {			
+			io.emit('startUserTimeout', 15000);
+		}
 		io.emit('users', this.users);
 	}
 
 	playerDouble(playerID, io) {
 		var player = this.users[this.locatePlayer(playerID)];
 		
+		var startTimer = true;
+
 		// Doubling logic
 		var bettingAmount = player.hands[player.currentHand].currentBet;
 
@@ -153,6 +161,7 @@ class Game {
 			}
 			else {
 				io.emit('gamephasechange', 'revealCard');
+				startTimer = false;
 				setTimeout(() => {
 					this.dealerPlay(io);
 				}, 500)
@@ -162,13 +171,19 @@ class Game {
 			player.currentHand++;
 			io.emit('users', this.users);
 		}
-			
+
+		if (startTimer) {
+			console.log('startingTimer');
+			io.emit('startUserTimeout', 15000);
+		}
 		io.emit('users', this.users);
 	}
 
 	playerHold(playerID, io) {
 		var player = this.users[this.locatePlayer(playerID)];
 		
+		var startTimer = true;
+
 		player.hands[player.currentHand].hasPlayed = true;
 
 		// Going directly to next player or hand
@@ -180,6 +195,7 @@ class Game {
 			}
 			else {
 				io.emit('gamephasechange', 'revealCard');
+				startTimer = false;
 				setTimeout(() => {
 					this.dealerPlay(io);
 				}, 500)
@@ -189,7 +205,11 @@ class Game {
 			player.currentHand++;
 			io.emit('users', this.users);
 		}
-			
+		
+		if (startTimer) {
+			io.emit('startUserTimeout', 15000);
+		}
+
 		io.emit('users', this.users);
 	}
 

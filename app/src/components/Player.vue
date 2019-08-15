@@ -9,6 +9,9 @@
       </div>
     </div>
 
+    <div v-if="$store.state.userSecondsLeft > 0" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
+    </div>
+
     <div v-if="(
       $store.state.gamePhase === 'waitingbet' || 
       $store.state.gamePhase === 'aboutToStart') &&
@@ -357,5 +360,13 @@ export default {
       to {
           transform:rotate(360deg);
       }
+  }
+
+  .usertimer {
+    position: absolute;
+    left: 0px;
+    top: -2px;
+    height: 4px;
+    background-color: #292;
   }
 </style>

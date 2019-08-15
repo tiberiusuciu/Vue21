@@ -19,7 +19,9 @@ export default new Vuex.Store({
     currentUser: -1,
     gamePhase: "waitingbet",
     gamestarttime: 0,
-    gamestarttimer: null
+    gamestarttimer: null,
+    userSecondsLeft: 0,
+    userTimer: null
   },
   mutations: {
     sendUserInfo(state) {
@@ -30,15 +32,27 @@ export default new Vuex.Store({
       // state.bettingAmount = 0;
     },
     userHit(state) {
+      clearInterval(state.userTimer);
+      state.userTimer = null;
+      state.userSecondsLeft = 0;
       state.socket.emit('userHit', { id: state.id });
     },
     userDouble(state) {
+      clearInterval(state.userTimer);
+      state.userTimer = null;
+      state.userSecondsLeft = 0;
       state.socket.emit('userDouble', { id: state.id });
     },
     userSplit(state) {
+      clearInterval(state.userTimer);
+      state.userTimer = null;
+      state.userSecondsLeft = 0;
       state.socket.emit('userSplit', { id: state.id });
     },
     userHold(state) {
+      clearInterval(state.userTimer);
+      state.userTimer = null;
+      state.userSecondsLeft = 0;
       state.socket.emit('userHold', { id: state.id });
     },
     "SOCKET_playerinfo": (state, data) => {
@@ -54,6 +68,11 @@ export default new Vuex.Store({
       state.socketid = data;
     },
     "SOCKET_gamephasechange": (state, data) => {
+      if (data === 'revealCard') {
+        clearInterval(state.userTimer);
+        state.userTimer = null;
+        state.userSecondsLeft = 0;
+      }
       state.gamePhase = data;
     },
     "SOCKET_gamebegintimer": (state, data) => {
@@ -71,6 +90,28 @@ export default new Vuex.Store({
     },
     "SOCKET_assignNextPlayer": (state, data) => {
       state.currentUser = data;
+    },
+    "SOCKET_startUserTimeout": (state, data) => {
+      console.log('timer!');
+      state.userSecondsLeft = data;
+
+      if (state.userTimer) {
+        clearInterval(state.userTimer);
+      }
+      state.userTimer = setInterval(() => {
+        console.log('tick');
+        state.userSecondsLeft -= 5;
+        if (state.userSecondsLeft <= 0) {
+          console.log('timer done!');
+          
+          clearInterval(state.userTimer);
+          state.userTimer = null;
+          if (state.currentUser === state.id) {
+            state.socket.emit('userHold', { id: state.id });
+          }
+        }
+      }, 5);
+
     }
   },
   actions: {
