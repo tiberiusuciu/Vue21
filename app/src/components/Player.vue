@@ -1,7 +1,12 @@
 <template>
   <div class="hand">
     <div class="username-tag">
-      {{ userInfo.username }}
+      <div>
+        {{ userInfo.username }}
+      </div>
+      <div style="font-size: 1.25em;" v-if="$store.state.gamePhase !== 'waitingbet'">
+        (<i class="far fa-dollar-sign" style="color:lime;"></i> {{ userInfo.money }})
+      </div>
     </div>
 
     <div v-if="($store.state.gamePhase === 'waitingbet' || $store.state.gamePhase === 'aboutToStart') && (!userInfo.hasbet && userInfo.username !== '')">
@@ -12,7 +17,7 @@
         </span>
       </div>
       <div class="betting-area-your-money your-bet">
-        <div class="available-money-tag">Your Bet</div>
+        <div class="available-money-tag">Your Bet ($)</div>
         <input type="number" class="betting-input" placeholder="Place bet here" @keyup="setAmount" :value="$store.state.bettingAmount" />
       </div>
       <div class="betting-area-confirm" @click="confirmBet">
@@ -27,6 +32,11 @@
             <div class="aligned-content">{{hand.currentValue}}</div>
           </div>
           <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
+          <div class="floating-betting-box">
+            <div class="betting-box">
+              <i class="far fa-dollar-sign" style="color:lime;"></i> {{ hand.currentBet }}
+            </div>
+          </div>
         </div>
       </template>
     </template>
@@ -203,5 +213,26 @@ export default {
     color: white;
     padding: 10px;
     border-radius: 6px;
+  }
+
+  .floating-betting-box {
+    user-select: none;
+    position: absolute;
+    text-align: center;
+    bottom: -41px;
+    width: 100%;
+    left: 0px;
+  }
+
+  .betting-box {
+    color: white;
+    font-size: 1.75em;
+    background-color: #050;
+    padding: 20px 15px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 50px;
+    margin: auto;
+    width: fit-content;
   }
 </style>

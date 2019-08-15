@@ -50,6 +50,10 @@ class Deck {
     draw() {
       var card = this.cards[0];
       this.cards.shift();
+      console.log('returning', card);
+      console.log('there is only ' + this.cards.length + ' cards left');
+      
+      
       return card;
     }
 }
