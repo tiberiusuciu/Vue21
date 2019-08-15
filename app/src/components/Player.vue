@@ -44,10 +44,22 @@
           <div class="floating-value">
             <div class="aligned-content" :class="{'unactive': $store.state.currentUser !== $store.state.id}">{{hand.currentValue}}</div>
           </div>
+          <div class="feedback blackjack" v-if="hand.hasBlackJack" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <div class="star">
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+          <div class="feedback bust" v-if="hand.currentValue > 21" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <i class="fas fa-times"></i>
+          </div>
+
+          <div class="feedback double" v-else-if="hand.hasDoubled" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <i class="fal fa-times"></i>2
+          </div>
           <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
           <div class="floating-betting-box">
             <div class="betting-box" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
-              <i class="far fa-dollar-sign" style="color:lime;"></i> {{ hand.currentBet }}
+              <i class="far fa-dollar-sign" style="color:lime;"></i> {{ hand.hasDoubled ? hand.currentBet / 2 : hand.currentBet }}
             </div>
           </div>
         </div>
@@ -251,10 +263,6 @@ export default {
     width: fit-content;
   }
 
-  .unactive {
-    background-color: #040;
-  }
-
   .game-over {
     color: white;
     font-weight: normal;
@@ -282,5 +290,62 @@ export default {
     background-color: #040;
     width: 160px;
     margin: auto;
+  }
+
+  .feedback {
+    background-color: #050;
+    border: 3px solid white;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    position: absolute;
+    top: -27px;
+    right: -28px;
+  }
+
+  .bust {
+    color: #F22;
+    font-size: 2.5em;
+  }
+
+  .double i {
+    vertical-align: middle;
+  }
+
+  .unactive {
+    background-color: #040;
+  }
+  
+  .double {
+    color: white;
+    font-size: 1.75em;
+    background: #2b5876;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4e4376, #2b5876);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4e4376, #2b5876); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .blackjack {
+    color: white;
+    font-size: 1.75em;
+    background: #4e54c8;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #8f94fb, #4e54c8);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #8f94fb, #4e54c8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .star {
+    animation-name: spin;
+    animation-duration: 2500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+  }
+
+  @keyframes spin {
+      from {
+          transform:rotate(0deg);
+      }
+      to {
+          transform:rotate(360deg);
+      }
   }
 </style>
