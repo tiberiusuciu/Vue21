@@ -49,7 +49,7 @@ io.on('connection', function(socket){
     game.playerDouble(data.id, io);
   });
   socket.on('userSplit', (data) => {
-    console.log('userSplit');
+    game.playerSplit(data.id, io);
   });
   socket.on('userHold', (data) => {
     game.playerHold(data.id, io);

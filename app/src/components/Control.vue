@@ -28,7 +28,10 @@ export default {
       this.$store.dispatch('onUserDouble');
     },
     split() {
-      this.$store.dispatch('onUserSplit');
+      var playerHand = this.userInfo.hands[this.userInfo.currentHand];
+      if (playerHand.cards[0].charAt(0) === playerHand.cards[1].charAt(0) && !playerHand.hasHit) {
+        this.$store.dispatch('onUserSplit');
+      }
     },
     hold() {
       this.$store.dispatch('onUserHold');
@@ -56,7 +59,7 @@ export default {
     .control {
         position: relative;
         box-sizing: border-box;
-        height: 20vh;
+        /* height: 20vh; */
         background-color: #040;
     }
 

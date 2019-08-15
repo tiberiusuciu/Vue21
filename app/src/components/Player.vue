@@ -48,7 +48,9 @@
             <div class="aligned-content" :class="{'unactive': $store.state.currentUser !== $store.state.id}">{{hand.currentValue}}</div>
           </div>
 
-
+          <div class="feedback currenthand" v-if="userInfo.currentHand === index && userInfo.id === $store.state.currentUser && $store.state.gamePhase === 'userplay'" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+              <i class="fas fa-eye"></i>
+          </div>
 
           <div class="feedback blackjack" v-if="hand.hasBlackJack" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
             <div class="star">
@@ -134,7 +136,7 @@ export default {
   .hand {
     padding-top: 50px;
     box-sizing: border-box;
-    height: 40vh;
+    height: 45vh;
     border-top: 1px solid #040;
     position: relative;
     background-color: #050;
@@ -233,6 +235,8 @@ export default {
     position: relative;
     border-radius: 6px;
     box-sizing: border-box;
+    margin-left: 30px;
+    margin-right: 30px;
   }
 
   .floating-value {
@@ -344,6 +348,17 @@ export default {
     background: #4e54c8;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #8f94fb, #4e54c8);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #8f94fb, #4e54c8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .currenthand {
+    color: white;
+    font-size: 1.75em;
+    left: -28px;
+    line-height: 53px;
+    background: #11998e;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #38ef7d, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #38ef7d, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   }
 
   .star {

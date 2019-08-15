@@ -213,6 +213,55 @@ class Game {
 		io.emit('users', this.users);
 	}
 
+	playerSplit(playerID, io) {
+		// locate the player
+		var player = this.users[this.locatePlayer(playerID)];
+		var currentHand = player.currentHand;
+
+		// create a new hand
+		player.money -= player.hands[currentHand].currentBet;
+
+		var firstCard = player.hands[currentHand].cards[0];
+		var secondCard = player.hands[currentHand].cards[1];
+		player.hands[currentHand].cards = [];
+
+		player.hands.push({
+			currentBet: player.hands[currentHand].currentBet,
+			cards: [],
+			currentValue: 0,
+			hasPlayed: false,
+			hasHit: false,
+			hasBust: false,
+			hasDoubled: false,
+			hasBlackJack: false,
+			instantLose: false,
+		});
+
+		// insert second card of first hand in second hand
+
+		player.hands[currentHand].cards[0] = firstCard;
+		player.hands[currentHand + 1].cards[0] = secondCard;
+
+		io.emit('users', this.users);
+		
+		setTimeout(() => {
+			player.dealCards(this.deck.draw());
+			io.emit('users', this.users);
+			setTimeout(() => {
+				player.currentHand = player.currentHand + 1;
+				player.dealCards(this.deck.draw());
+				io.emit('users', this.users);
+				// return new setup to all users and notify
+				// start timer
+				setTimeout(() => {
+					player.currentHand = currentHand;
+					io.emit('users', this.users);
+					io.emit('startUserTimeout', 15000);
+				}, 500)
+			}, 500)
+		}, 500);
+	}
+
 	dealerPlay(io) {
 		this.currentPlayer = -1;
 		io.emit('assignNextPlayer', this.currentPlayer);
