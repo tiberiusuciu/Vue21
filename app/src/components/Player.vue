@@ -44,18 +44,27 @@
           <div class="floating-value">
             <div class="aligned-content" :class="{'unactive': $store.state.currentUser !== $store.state.id}">{{hand.currentValue}}</div>
           </div>
+
+
+
           <div class="feedback blackjack" v-if="hand.hasBlackJack" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
             <div class="star">
               <i class="fas fa-star"></i>
             </div>
           </div>
-          <div class="feedback bust" v-if="hand.currentValue > 21" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
-            <i class="fas fa-times"></i>
-          </div>
 
-          <div class="feedback double" v-else-if="hand.hasDoubled" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
-            <i class="fal fa-times"></i>2
-          </div>
+          <template v-if="$store.state.dealer.hands && $store.state.dealer.hands[0]">
+            <div class="feedback bust" v-if="$store.state.dealer.hands && hand.currentValue > 21 || ($store.state.dealer.hands[0].instantLose && !hand.hasBlackJack)" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+              <i class="fas fa-times"></i>
+            </div>
+
+            <div class="feedback double" v-else-if="hand.hasDoubled" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+              <i class="fal fa-times"></i>2
+            </div>
+          </template>
+
+
+
           <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
           <div class="floating-betting-box">
             <div class="betting-box" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
@@ -65,6 +74,7 @@
         </div>
       </template>
     </template>
+
   </div>
 </template>
 

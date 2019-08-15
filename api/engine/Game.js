@@ -57,6 +57,7 @@ class Game {
 						hasBust: false,
 						hasDoubled: false,
 						hasBlackJack: false,
+						instantLose: false
 					}
 				}
 				this.dealer.dealCards(this.deck.draw());
@@ -71,8 +72,18 @@ class Game {
 				// emit for all about the dealer
 				clearInterval(interval);
 
-				io.emit('gamephasechange', 'userplay');
-				io.emit('assignNextPlayer', this.findNextPlayer());
+				// House has blackjack
+				if (this.dealer.hands[0].currentValue == 21 && (this.dealer.hands[0].cards[0].charAt(0) === '1' || this.dealer.hands[0].cards[0].charAt(0) === 'J' || this.dealer.hands[0].cards[0].charAt(0) === 'Q' || this.dealer.hands[0].cards[0].charAt(0) === 'K')) {
+					io.emit('gamephasechange', 'revealCard');
+					setTimeout(() => {
+						this.dealerPlay(io);
+					}, 500)
+				}
+				else {
+					io.emit('gamephasechange', 'userplay');
+					io.emit('assignNextPlayer', this.findNextPlayer());
+				}
+
 				// notify that player ones needs to play
 			}
 		}, 500);

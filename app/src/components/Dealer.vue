@@ -6,31 +6,34 @@
         <div class="timer" v-if="$store.state.gamePhase === 'aboutToStart'">
             Game starts in {{$store.state.gamestarttime}} seconds
         </div>
-
-        <template v-if="(
-            $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards') && $store.state.dealer.hands.length > 0">  
-            <div class="hand-area">
-                <div class="floating-value">
-                    <div class="aligned-content">{{ transformedValue }}</div>
-                </div>
-                <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
-                    <template v-if="index == 0">
-                        <Card :key="index" :card_identity="card"/>
-                    </template>
-                    <template v-else-if="index == 1">
-                        <template v-if="$store.state.gamePhase !== 'revealCard' && $store.state.gamePhase !== 'giveRewards'">
-                            <Card :key="index" :card_identity="'hidden'"/>
+        
+        <template v-if="$store.state.dealer.hands">
+            <template v-if="(
+                $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards') && $store.state.dealer.hands.length > 0">  
+                <div class="hand-area">
+                    <div class="floating-value">
+                        <div class="aligned-content">{{ transformedValue }}</div>
+                    </div>
+                    <template v-for="(card, index) in $store.state.dealer.hands[0].cards">
+                        <template v-if="index == 0">
+                            <Card :key="index" :card_identity="card"/>
+                        </template>
+                        <template v-else-if="index == 1">
+                            <template v-if="$store.state.gamePhase !== 'revealCard' && $store.state.gamePhase !== 'giveRewards'">
+                                <Card :key="index" :card_identity="'hidden'"/>
+                            </template>
+                            <template v-else>
+                                <Card :key="index" :card_identity="card" />
+                            </template>
                         </template>
                         <template v-else>
-                            <Card :key="index" :card_identity="card" />
+                            <Card :key="index" :card_identity="card"/>
                         </template>
                     </template>
-                    <template v-else>
-                        <Card :key="index" :card_identity="card"/>
-                    </template>
-                </template>
-            </div>
+                </div>
+            </template>
         </template>
+
 
         <div class="anouncement" v-if="$store.state.currentUser != -1 && $store.state.currentUser !== $store.state.id && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
             Waiting on {{ $store.state.users[$store.state.currentUser].username }}'s turn

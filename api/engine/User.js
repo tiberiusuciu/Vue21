@@ -17,6 +17,10 @@ class User {
 		}
 		else if (this.hands[this.currentHand].currentValue == 21 && this.hands[this.currentHand].cards.length == 2) {
 			this.hands[this.currentHand].hasBlackJack = true;
+			var firstcardValue = this.hands[this.currentHand].cards[0].charAt(0);
+			if (firstcardValue === '1' || firstcardValue === 'J' || firstcardValue === 'Q' || firstcardValue === 'K') {
+				this.hands[this.currentHand].instantLose = true;
+			}
 		}
 	};
 
@@ -57,6 +61,7 @@ class User {
 			hasBust: false,
 			hasDoubled: false,
 			hasBlackJack: false,
+			instantLose: false,
 		});
 	};
 }
