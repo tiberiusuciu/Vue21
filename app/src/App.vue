@@ -21,6 +21,7 @@
         <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
         </div>
       </div>
+      <BettingBox />
       <Player />
       <Control v-if="$store.state.gamePhase === 'userplay'"/>
       <OtherPlayer />
@@ -35,6 +36,7 @@ import Dealer from './components/Dealer.vue'
 import Control from './components/Control.vue'
 import OtherPlayer from './components/OtherPlayer.vue'
 import InsuranceDialog from './components/InsuranceDialog.vue'
+import BettingBox from './components/BettingBox.vue'
 
 export default {
   name: 'app',
@@ -43,7 +45,8 @@ export default {
     Dealer,
     Control,
     OtherPlayer,
-    InsuranceDialog
+    InsuranceDialog,
+    BettingBox
   },
   methods: {
     sendUserInfo() {
@@ -172,6 +175,11 @@ export default {
   @media screen and (max-width: 800px) {
       .overlay-area {
         padding: 0px;
+      }
+
+      .input-area div {
+        width: 50px;
+        padding: 0px 10px;
       }
 
       .form-area {

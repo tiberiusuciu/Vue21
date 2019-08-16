@@ -388,11 +388,10 @@ class Game {
 									(player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
 									cashStack += player.hands[j].currentBet * 2
 								}
-								if (player.hands[j].currentValue == this.dealer.hands[0].currentValue) {
+								else if (player.hands[j].currentValue == this.dealer.hands[0].currentValue && !player.hands[j].hasBlackJack) {
 									cashStack += player.hands[j].currentBet;
 								}
-
-								if (this.dealer.hands[0].hasBlackJack) {
+								else if (this.dealer.hands[0].hasBlackJack) {
 									if (player.hands[j].hasBlackJack && !player.insuranceAnswer) {
 										cashStack += player.hands[j].currentBet * 2;
 									}
@@ -431,8 +430,11 @@ class Game {
 			this.users[i].hands = [];
 			this.users[i].currentHand = 0;
 			this.users[i].hasbet = false;
+			this.users[i].hasPlayed = false;
 			this.users[i].insuranceAnswer = false;
 			if (this.users[i].toDelete) {
+				console.log('deleting id', this.users[i].id);
+				
 				this.users.splice(i, 1);
 				i--;
 			}
