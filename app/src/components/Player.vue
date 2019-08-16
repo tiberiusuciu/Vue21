@@ -390,4 +390,76 @@ export default {
     height: 4px;
     background-color: #292;
   }
+
+  @media screen and (max-width: 800px) {
+    .hand {
+      padding-top: 80px;
+    }
+
+    .hand-area {
+      padding: 25px 5px;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+
+    .betting-area-your-money {
+      display: inline-block;
+      border: 2px solid white;
+      border-radius: 6px;
+      min-width: 100px;
+      width: fit-content;
+      margin: auto;
+      position: relative;
+      padding: 30px 40px;
+      color: white;
+      letter-spacing: 1px;
+      margin-right: 50px;
+      margin-left: 50px;
+    }
+
+    .betting-box {
+      font-size: 1.25em;
+      background-color: #050;
+      padding: 13px 10px;
+      border: 2px solid white;
+    }
+
+    .floating-betting-box {
+      user-select: none;
+      position: absolute;
+      text-align: center;
+      bottom: -41px;
+      width: 100%;
+      left: 0px;
+    }
+
+    .aligned-content {
+      width: 50px;
+      font-size: 1.5em;
+      padding: 5px;
+    }
+
+    .floating-betting-box {
+      bottom: -32px;
+    }
+
+    .floating-value {
+      top: -20px;
+    }
+
+    .feedback {
+      width: 35px;
+      height: 35px;
+      line-height: 38px;
+      top: -20px;
+      left: -21px;
+      font-size: 1.3em;
+    }
+
+    .username-tag {
+      top: 5px;
+      left: 5px;
+      letter-spacing: 1px;
+    }
+  }
 </style>

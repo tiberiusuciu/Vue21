@@ -43,65 +43,96 @@ export default {
 </script>
 
 <style scoped>
+  .card {
+      width: 100px;
+      height: 140px;
+      background-color: #E9E9E9;
+      border-radius: 6px;
+      margin: auto;
+      text-align: center;
+      line-height: 140px;
+      font-size: 2.5em;
+      color: black;
+      border: 1px solid black;
+      font-weight: bold;
+      user-select: none;
+      cursor: pointer;
+      display: inline-block;
+      margin: 5px 10px 0px 10px;
+      vertical-align: bottom;
+      box-sizing: border-box;
+      /* For animation purposes */
+      /* transition: 
+          background-color .1s ease-in-out,
+          width .1s ease-in-out,
+          height .1s ease-in-out, line-height, .1s ease-in-out, color, .1s ease-in-out; */
+  }
+
+  .hidden {
+    padding: 10px;
+  }
+  
+  .hidden div {
+    background-color: lightcoral;
+    height: 100%;
+    width: 100%;
+    border-radius: 3px;
+  }
+
+  /* For animation purposes */
+  /* 
+  .card:hover {
+      background-color: white;
+      width: 110px;
+      height: 150px;
+      line-height: 150px;
+      margin: 0px 5px 0px 5px;
+      color: red;
+  } */
+
+  .card span {
+      margin-right: -12px;
+  }
+
+  .red {
+      color: red;
+  }
+
+  .showcase {
+    line-height: 65px;
+    margin-left: -45px;
+    text-align: left;
+    padding-left: 4px;
+  }
+
+  @media screen and (max-width: 800px) {
     .card {
-        width: 100px;
-        height: 140px;
-        background-color: #E9E9E9;
-        border-radius: 6px;
-        margin: auto;
-        text-align: center;
-        line-height: 140px;
-        font-size: 2.5em;
-        color: black;
-        border: 1px solid black;
-        font-weight: bold;
-        user-select: none;
-        cursor: pointer;
-        display: inline-block;
-        margin: 5px 10px 0px 10px;
-        vertical-align: bottom;
-        box-sizing: border-box;
-        /* For animation purposes */
-        /* transition: 
-            background-color .1s ease-in-out,
-            width .1s ease-in-out,
-            height .1s ease-in-out, line-height, .1s ease-in-out, color, .1s ease-in-out; */
+      width: 50px;
+      height: 70px;
+      background-color: #E9E9E9;
+      border-radius: 6px;
+      margin: auto;
+      text-align: center;
+      line-height: 70px;
+      font-size: 1em;
+      color: black;
+      border: 1px solid black;
+      font-weight: bold;
+      user-select: none;
+      cursor: pointer;
+      display: inline-block;
+      margin: 5px 10px 0px 10px;
+      vertical-align: bottom;
+      box-sizing: border-box;
+      /* For animation purposes */
+      /* transition: 
+          background-color .1s ease-in-out,
+          width .1s ease-in-out,
+          height .1s ease-in-out, line-height, .1s ease-in-out, color, .1s ease-in-out; */
     }
-
-    .hidden {
-      padding: 10px;
-    }
-    
-    .hidden div {
-      background-color: lightcoral;
-      height: 100%;
-      width: 100%;
-      border-radius: 3px;
-    }
-
-    /* For animation purposes */
-    /* 
-    .card:hover {
-        background-color: white;
-        width: 110px;
-        height: 150px;
-        line-height: 150px;
-        margin: 0px 5px 0px 5px;
-        color: red;
-    } */
 
     .card span {
-        margin-right: -12px;
+        margin-right: -4px;
     }
-
-    .red {
-        color: red;
-    }
-
-    .showcase {
-      line-height: 65px;
-      margin-left: -45px;
-      text-align: left;
-      padding-left: 4px;
-    }
+  }
 </style>

@@ -151,4 +151,34 @@ export default {
     opacity: .75;
   }
 
+
+  @media screen and (max-width: 800px) {
+      .overlay-area {
+        padding: 0px;
+      }
+
+      .form-area {
+        background-color: ghostwhite;
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+        padding: 20px;
+        box-sizing: border-box;
+        max-width: 100%;
+        min-width: 0px;
+        max-height: 100%;
+        min-height: 0px;
+        padding-top: 35%;
+      }
+  }
+
+  @media screen and (min-width: 800px) and (max-height: 700px) {
+    /* .name-area {
+      box-sizing: border-box;
+      flex: 1;
+      padding-top: 150px;
+      padding-left: 10px;
+    } */
+  }
+
 </style>
