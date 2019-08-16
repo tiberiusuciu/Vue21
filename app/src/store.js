@@ -11,7 +11,7 @@ export default new Vuex.Store({
       username: ""
     },
     socketid: "",
-    socket: io('http://192.168.0.111:3000'),
+    socket: io('http://34.219.131.135:3000'),
     id: null,
     bettingAmount: "",
     dealer: {},
