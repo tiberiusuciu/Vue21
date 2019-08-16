@@ -440,6 +440,8 @@ class Game {
 		this.dealer.hands = [];
 		this.dealer.currentHand = 0;
 		this.dealer.hasbet = false;
+		this.currentPlayer = -1;
+
 	}
 
 	removePlayer(io, socketid) {
@@ -459,6 +461,7 @@ class Game {
 			// console.log('REMOVING SOMEBODY, here is current list', this.users);
 			player.hasPlayed = true;
 			player.toDelete = true;
+
 			// check if this player was current player
 			if (this.users[this.currentPlayer].id === player.id) {
 				this.clearTimer();
