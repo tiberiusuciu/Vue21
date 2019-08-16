@@ -344,8 +344,9 @@ class Game {
 		var player = this.users[this.locatePlayer(playerID)];
 		// asign answer
 		console.log("WE GET A ANSWERE FOR INSRUANCE");
-		
-		player.insuranceAnswer = answer;
+		if (player !== undefined) {
+			player.insuranceAnswer = answer;
+		}
 	}
 
 	dealerPlay(io) {
