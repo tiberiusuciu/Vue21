@@ -35,7 +35,7 @@
         </template>
 
 
-        <div class="anouncement" v-if="$store.state.currentUser != -1 && $store.state.currentUser !== $store.state.id && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
+        <div class="anouncement" v-if="$store.state.currentUser != -1 && $store.state.users[$store.state.currentUser].id !== $store.state.id && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
             Waiting on {{ $store.state.users[$store.state.currentUser].username }}'s turn
         </div>
     </div>

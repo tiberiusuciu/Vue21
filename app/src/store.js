@@ -115,7 +115,8 @@ export default new Vuex.Store({
           
           clearInterval(state.userTimer);
           state.userTimer = null;
-          if (state.currentUser === state.id && !state.askInsurance) {
+
+          if (state.users[state.currentUser].id === state.id && !state.askInsurance) {
             state.socket.emit('userHold', { id: state.id });
           }
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="other-hand" v-if="$store.state.gamePhase === 'userplay' && $store.state.currentUser !== $store.state.id && $store.state.currentUser !== -1">
+    <div class="other-hand" v-if="$store.state.gamePhase === 'userplay' && !isCurrentPlayer() && $store.state.currentUser !== -1">
         <div class="card-layout">
             <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card" is_showcase/>
         </div>
@@ -21,6 +21,14 @@ export default {
     name: 'OtherPlayer',
     components: {
         Card
+    },
+    methods: {
+        isCurrentPlayer() {
+            if (this.$store.state.users.length == 0 || this.$store.state.currentUser == -1) {
+                return false;
+            }
+            return this.$store.state.users[this.$store.state.currentUser].id === this.$store.state.id;
+        }
     },
     computed: {
         hand() {

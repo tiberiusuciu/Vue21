@@ -1,5 +1,5 @@
 <template>
-  <div class="hand" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+  <div class="hand" :class="{'unactive': !isCurrentPlayer()}">
     <div class="username-tag">
       <div>
         {{ userInfo.username }}
@@ -45,25 +45,25 @@
       <template v-for="(hand, index) in userInfo.hands">
         <div :key="index" class="hand-area" v-if="hand.cards.length > 0">
           <div class="floating-value">
-            <div class="aligned-content" :class="{'unactive': $store.state.currentUser !== $store.state.id}">{{hand.currentValue}}</div>
+            <div class="aligned-content" :class="{'unactive': !isCurrentPlayer()}">{{hand.currentValue}}</div>
           </div>
 
-          <div class="feedback currenthand" v-if="userInfo.currentHand === index && userInfo.id === $store.state.currentUser && $store.state.gamePhase === 'userplay'" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+          <div class="feedback currenthand" v-if="userInfo.currentHand === index && isCurrentPlayer() && $store.state.gamePhase === 'userplay'" :class="{'unactive': !isCurrentPlayer()}">
               <i class="fas fa-eye"></i>
           </div>
 
-          <div class="feedback blackjack" v-if="hand.hasBlackJack" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+          <div class="feedback blackjack" v-if="hand.hasBlackJack" :class="{'unactive': !isCurrentPlayer()}">
             <div class="star">
               <i class="fas fa-star"></i>
             </div>
           </div>
 
           <template v-if="$store.state.dealer.hands && $store.state.dealer.hands[0]">
-            <div class="feedback bust" v-if="$store.state.dealer.hands && hand.currentValue > 21 || ($store.state.dealer.hands[0].instantLose && !hand.hasBlackJack)" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <div class="feedback bust" v-if="$store.state.dealer.hands && hand.currentValue > 21 || ($store.state.dealer.hands[0].instantLose && !hand.hasBlackJack)" :class="{'unactive': !isCurrentPlayer()}">
               <i class="fas fa-times"></i>
             </div>
 
-            <div class="feedback double" v-else-if="hand.hasDoubled" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <div class="feedback double" v-else-if="hand.hasDoubled" :class="{'unactive': !isCurrentPlayer()}">
               <i class="fal fa-times"></i>2
             </div>
           </template>
@@ -72,7 +72,7 @@
 
           <Card v-for="(card, index) in hand.cards" :key="index" :card_identity="card"/>
           <div class="floating-betting-box">
-            <div class="betting-box" :class="{'unactive': $store.state.currentUser !== $store.state.id}">
+            <div class="betting-box" :class="{'unactive': !isCurrentPlayer()}">
               <i class="far fa-dollar-sign" style="color:lime;"></i> {{ hand.hasDoubled ? hand.currentBet / 2 : hand.currentBet }}
             </div>
           </div>
@@ -108,6 +108,12 @@ export default {
             this.$store.state.bettingAmount = 0;
         }
       }
+    },
+    isCurrentPlayer() {
+      if (this.$store.state.users.length == 0 || this.$store.state.currentUser == -1) {
+        return false;
+      }
+      return this.$store.state.users[this.$store.state.currentUser].id === this.$store.state.id;
     }
   },
   computed: {

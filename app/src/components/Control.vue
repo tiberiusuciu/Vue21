@@ -1,5 +1,5 @@
 <template>
-  <div class="control" >
+  <div class="control" v-if="isCurrentPlayer()">
 
     <div class="buttoncontrol hit" @click="hit">
       Hit
@@ -35,6 +35,12 @@ export default {
     },
     hold() {
       this.$store.dispatch('onUserHold');
+    },
+    isCurrentPlayer() {
+      if (this.$store.state.users.length == 0 || this.$store.state.currentUser == -1) {
+        return false;
+      }
+      return this.$store.state.users[this.$store.state.currentUser].id === this.$store.state.id;
     }
   },
   computed: {

@@ -1,5 +1,5 @@
 class User {
-	constructor(username, id) {
+	constructor(username, id, socketid) {
 		this.id = id;
 		this.username = username;
 		this.money = 0;
@@ -7,6 +7,8 @@ class User {
 		this.hands = [];
 		this.hasbet = false;
 		this.insuranceAnswer = false;
+		this.socketid = socketid;
+		this.toDelete = false;
 	}
 
 	dealCards(newCard) {

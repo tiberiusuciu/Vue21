@@ -12,8 +12,8 @@ class Game {
 		// this.secondsPassed = 0;
 	}
 
-	addNewUser(info, id) {
-		var user = new User(info.username, id);
+	addNewUser(info, id, socketid) {
+		var user = new User(info.username, id, socketid);
 		user.money = 100;
 		this.users.push(user);
 	}
@@ -128,7 +128,7 @@ class Game {
 	findNextPlayer() {
 		for (var i = 0; i < this.users.length; i++) {
 			if (this.users[i].hasbet) {
-				if (!this.users[i].hands[this.users[i].currentHand].hasPlayed) {
+				if (!this.users[i].hands[this.users[i].currentHand].hasPlayed && !this.users[i].toDelete) {
 					this.currentPlayer = i;
 					return i;
 				}
@@ -339,18 +339,28 @@ class Game {
 							var player = this.users[i];
 							var cashStack = 0;
 							for (var j = 0; j < player.hands.length; j++) {
-								if (player.hands[j].currentValue <= 21 && (player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
+								if (
+									player.hands[j].currentValue <= 21 &&
+									!player.hands[j].hasBlackJack &&
+									(player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
 									cashStack += player.hands[j].currentBet * 2
 								}
 								if (player.hands[j].currentValue == this.dealer.hands[0].currentValue) {
 									cashStack += player.hands[j].currentBet;
 								}
-								if (player.hands[j].hasBlackJack && !player.insuranceAnswer) {
-									cashStack += player.hands[j].currentBet * 2;
+
+								if (this.dealer.hands[0].hasBlackJack) {
+									if (player.hands[j].hasBlackJack && !player.insuranceAnswer) {
+										cashStack += player.hands[j].currentBet * 2;
+									}
+									else if (player.hands[j].hasBlackJack && player.insuranceAnswer) {
+										cashStack += player.hands[j].currentBet * 2.5;
+									}
 								}
-								else if (player.hands[j].hasBlackJack && player.insuranceAnswer) {
+								else if (player.hands[j].hasBlackJack) {
 									cashStack += player.hands[j].currentBet * 2.5;
 								}
+
 							}
 							player.money += cashStack;
 						}
@@ -377,12 +387,85 @@ class Game {
 			this.users[i].currentHand = 0;
 			this.users[i].hasbet = false;
 			this.users[i].insuranceAnswer = false;
+			if (this.users[i].toDelete) {
+				this.users.splice(i, 1);
+				i--;
+			}
 		}
 		this.dealer.hands = [];
 		this.dealer.currentHand = 0;
 		this.dealer.hasbet = false;
 	}
 
+	removePlayer(io, socketid) {
+		// console.log('these are the users', this.users);
+		
+		var player;
+		
+		for (var i = 0; i < this.users.length; i++) {
+			if (this.users[i].socketid === socketid) {
+				player = this.users[i];
+				break;
+			}
+		}
+		console.log('this is who I need to remove', player);
+		
+		if (player) {
+			// console.log('REMOVING SOMEBODY, here is current list', this.users);
+			
+			// check if this player was current player
+			if (this.currentPlayer === player.id) {
+				// remove timer
+				var startTimer = true;
+				console.log('lets look for the next guy');
+				
+				// Going directly to next player or hand
+				var nextPlayer = this.findNextPlayer();
+				if (nextPlayer >= 0) {
+					console.log('found one!, assigning!');
+					
+					this.currentPlayer = this.users[nextPlayer].id;
+
+					io.emit('assignNextPlayer', nextPlayer);
+				}
+				else {
+					io.emit('gamephasechange', 'revealCard');
+					startTimer = false;
+					setTimeout(() => {
+						this.dealerPlay(io);
+					}, 500)
+				}
+				
+				if (startTimer) {
+					console.log('lets restart the timer');
+					
+					io.emit('startUserTimeout', 15000);
+				}
+	
+				// move to the next player
+			}
+			
+			// remove him
+			for(var i = 0; i < this.users.length; i++){ 
+				if (this.users[i].id === player.id) {
+					this.users[i].toDelete = true;
+				}
+			}
+
+			var next = this.findNextPlayer();
+			console.log('this index is next:', next);
+			
+			if (next >= 0) {
+				this.currentPlayer = this.users[next].id;
+				io.emit('assignNextPlayer', next);
+			}
+
+	
+			console.log('DONE, here is the new list', this.users);
+			
+			io.emit('users', this.users);
+		}
+	}
 }
 
 module.exports = Game;

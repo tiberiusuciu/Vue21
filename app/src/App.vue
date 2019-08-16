@@ -18,7 +18,7 @@
     <template v-if="$store.state.id !== null">
       <Dealer />
       <Player />
-      <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
+      <Control v-if="$store.state.gamePhase === 'userplay'"/>
       <OtherPlayer />
       <InsuranceDialog v-if="$store.state.askInsurance" />
     </template>

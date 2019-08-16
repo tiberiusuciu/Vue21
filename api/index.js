@@ -17,7 +17,7 @@ io.on('connection', function(socket){
   socket.emit("socketid", socket.id);
 
   socket.on('newUser', (data) => {
-    game.addNewUser(data.form, id);
+    game.addNewUser(data.form, id, socket.id);
     
     socket.to(data.socketId).emit('playerinfo', id);
     io.emit('users', game.users);
@@ -59,8 +59,11 @@ io.on('connection', function(socket){
     game.userAnswer(data.id, data.answer);
   });
 
-  socket.on("disconnect", function() {
-      console.log('disconnect');
+  socket.on("disconnect", () => {
+    console.log('btw, here is socket id', socket.id);
+    
+    game.removePlayer(io, socket.id);
+    console.log('disconnect');
   })
 
   var bettingTimeEnded = () => {

@@ -48,12 +48,15 @@ class Deck {
     }
 
     draw() {
+      if (!(this.cards[0])) {
+        console.log('OUT OF CARDS, GENERATING 8 DECKS');
+        this.cards = this.randomize(this.generateDeck(8));
+      }
       var card = this.cards[0];
       this.cards.shift();
       console.log('returning', card);
       console.log('there is only ' + this.cards.length + ' cards left');
-      
-      
+
       return card;
     }
 }
