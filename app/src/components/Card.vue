@@ -115,7 +115,6 @@ export default {
       text-align: center;
       line-height: 70px;
       font-size: 1em;
-      color: black;
       border: 1px solid black;
       font-weight: bold;
       user-select: none;
@@ -134,5 +133,16 @@ export default {
     .card span {
         margin-right: -4px;
     }
+    
+    .hidden {
+      padding: 5px;
+    }
+    .showcase {
+      line-height: 31px;
+      margin-left: -24px;
+      text-align: left;
+      padding-left: 4px;
+    }
   }
+
 </style>

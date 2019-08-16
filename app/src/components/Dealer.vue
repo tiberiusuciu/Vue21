@@ -145,4 +145,32 @@ export default {
         margin-top: 20px;
         letter-spacing: 1px;
     }
+
+    @media screen and (max-width: 800px) {
+        .hand {
+            padding-top: 80px;
+        }
+
+        .hand-area {
+            padding: 25px 5px;
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .aligned-content {
+            width: 50px;
+            font-size: 1.5em;
+            padding: 5px;
+        }
+
+        .floating-value {
+            top: -20px;
+        }
+
+        .dealer-tag {
+            top: 10px;
+            left: 10px;
+            letter-spacing: 1px;
+        }
+    }
 </style>

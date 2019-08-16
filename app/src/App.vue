@@ -17,6 +17,10 @@
     </template>
     <template v-if="$store.state.id !== null">
       <Dealer />
+      <div class="timer-area">
+        <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
+        </div>
+      </div>
       <Player />
       <Control v-if="$store.state.gamePhase === 'userplay'"/>
       <OtherPlayer />
@@ -151,6 +155,19 @@ export default {
     opacity: .75;
   }
 
+  .usertimer {
+    /* position: absolute; */
+    /* left: 0px; */
+    /* top: -2px; */
+    height: 4px;
+    background-color: #292;
+  }
+
+  .timer-area {
+    width: 100%;
+    height: 4px;
+  }
+
 
   @media screen and (max-width: 800px) {
       .overlay-area {
@@ -169,6 +186,10 @@ export default {
         max-height: 100%;
         min-height: 0px;
         padding-top: 35%;
+      }
+
+      .form-area p {
+        padding: 0px 40px;
       }
   }
 

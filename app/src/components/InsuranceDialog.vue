@@ -153,4 +153,15 @@ export default {
     .smalltext {
         font-size: 21px;
     }
+
+    @media screen and (max-width: 800px) {
+        .insurance-dialog-box {
+            padding: 25px 15px;
+            font-size: 1.2em;
+        }
+
+        .smalltext {
+            font-size: 13px;
+        }
+    }
 </style>

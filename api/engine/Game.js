@@ -462,41 +462,44 @@ class Game {
 			player.hasPlayed = true;
 			player.toDelete = true;
 
-			// check if this player was current player
-			if (this.users[this.currentPlayer].id === player.id) {
-				this.clearTimer();
-				// remove timer
-				var startTimer = true;
-				console.log('lets look for the next guy');
-				
-				// Going directly to next player or hand
-				var nextPlayer = this.findNextPlayer();
-				if (nextPlayer >= 0) {
-					console.log('found one!, assigning!');
+			if (this.users[this.currentPlayer] !== undefined) {
+				// check if this player was current player
+				if (this.users[this.currentPlayer].id === player.id) {
+					this.clearTimer();
+					// remove timer
+					var startTimer = true;
+					console.log('lets look for the next guy');
 					
-					this.currentPlayer = nextPlayer;
-
-					io.emit('assignNextPlayer', nextPlayer);
-				}
-				else {
-					console.log('found no one, switching to dealer');
-					
-					this.currentPhase = 'revealCard';
-					io.emit('gamephasechange', 'revealCard');
-					startTimer = false;
-					setTimeout(() => {
-						this.dealerPlay(io);
-					}, 500)
-				}
-				
-				if (startTimer) {
-					console.log('lets restart the timer');
-					this.timeoutManagement();
-					io.emit('startUserTimeout', 15000);
-				}
+					// Going directly to next player or hand
+					var nextPlayer = this.findNextPlayer();
+					if (nextPlayer >= 0) {
+						console.log('found one!, assigning!');
+						
+						this.currentPlayer = nextPlayer;
 	
-				// move to the next player
+						io.emit('assignNextPlayer', nextPlayer);
+					}
+					else {
+						console.log('found no one, switching to dealer');
+						
+						this.currentPhase = 'revealCard';
+						io.emit('gamephasechange', 'revealCard');
+						startTimer = false;
+						setTimeout(() => {
+							this.dealerPlay(io);
+						}, 500)
+					}
+					
+					if (startTimer) {
+						console.log('lets restart the timer');
+						this.timeoutManagement();
+						io.emit('startUserTimeout', 15000);
+					}
+		
+					// move to the next player
+				}
 			}
+
 			
 			// remove him
 			// for(var i = 0; i < this.users.length; i++){ 

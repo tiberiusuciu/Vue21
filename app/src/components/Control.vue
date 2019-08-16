@@ -1,6 +1,5 @@
 <template>
   <div class="control" v-if="isCurrentPlayer()">
-
     <div class="buttoncontrol hit" @click="hit">
       Hit
     </div>
@@ -69,6 +68,10 @@ export default {
         background-color: #040;
     }
 
+    .responsive-wrapper {
+      display: inline-block;
+    }
+
     .buttoncontrol {
       display: inline-block;
       width: 150px;
@@ -107,5 +110,29 @@ export default {
 
     .hold {
       background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+    }
+
+    @media screen and (max-width: 800px) {
+
+      .buttoncontrol {
+        width: 70px;
+        height: 70px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border: 5px solid #040;
+        background-color: white;
+        line-height: 70px;
+        font-weight: bold;
+        font-size: 1em;
+        margin-top: -20px;
+      }
+
+      .buttoncontrol:hover {
+        border: 5px solid white;
+      }
+
+      .responsive-wrapper {
+        display: block;
+      }
     }
 </style>

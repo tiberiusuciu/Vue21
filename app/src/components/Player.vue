@@ -4,12 +4,9 @@
       <div>
         {{ userInfo.username }}
       </div>
-      <div style="font-size: 1.25em;" v-if="$store.state.gamePhase !== 'waitingbet'">
+      <div v-if="$store.state.gamePhase !== 'waitingbet'" class="info-money-tag">
         (<i class="far fa-dollar-sign" style="color:lime;"></i> {{ userInfo.money }})
       </div>
-    </div>
-
-    <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
     </div>
 
     <div v-if="(
@@ -18,13 +15,13 @@
       (!userInfo.hasbet && userInfo.username !== '') &&
       userInfo.money > 0">
       <div class="betting-area-your-money">
-        <div class="available-money-tag">Your Money</div>
+        <div class="available-info-">Your Money</div>
         <span class="money-value">
           ${{ userInfo.money - $store.state.bettingAmount }}
         </span>
       </div>
       <div class="betting-area-your-money your-bet">
-        <div class="available-money-tag">Your Bet ($)</div>
+        <div class="available-info-">Your Bet ($)</div>
         <input type="number" class="betting-input" placeholder="Place bet here" @keyup="setAmount" :value="$store.state.bettingAmount" />
       </div>
       <div class="betting-area-confirm" @click="confirmBet">
@@ -146,6 +143,13 @@ export default {
     border-top: 1px solid #040;
     position: relative;
     background-color: #050;
+    /* in case we overflow, we could go horizontal */
+    /* overflow-x: scroll;
+      white-space: nowrap;
+      overflow-y: hidden;
+      padding: inherit 50px;
+      padding-left: 20px;
+      padding-right: 20px; */
   }
   .username-tag {
     color: white;
@@ -170,7 +174,7 @@ export default {
     margin-left: 50px;
   }
 
-  .available-money-tag {
+  .available-info- {
     position: absolute;
     /* background-color: #050; */
     top: -20px;
@@ -383,29 +387,31 @@ export default {
       }
   }
 
-  .usertimer {
-    position: absolute;
-    left: 0px;
-    top: -2px;
-    height: 4px;
-    background-color: #292;
+  .info-money-tag {
+    font-size: 1.25em;
   }
 
   @media screen and (max-width: 800px) {
     .hand {
       padding-top: 80px;
+      overflow-x: scroll;
+      white-space: nowrap;
+      overflow-y: hidden;
+      padding: inherit 50px;
+      padding-left: 20px;
+      padding-right: 20px;
+      -webkit-overflow-scrolling: touch;
     }
 
     .hand-area {
       padding: 25px 5px;
-      margin-left: 15px;
-      margin-right: 15px;
+      margin-left: 25px;
+      margin-right: 25px;
     }
 
     .betting-area-your-money {
       display: inline-block;
       border: 2px solid white;
-      border-radius: 6px;
       min-width: 100px;
       width: fit-content;
       margin: auto;
@@ -419,7 +425,6 @@ export default {
 
     .betting-box {
       font-size: 1.25em;
-      background-color: #050;
       padding: 13px 10px;
       border: 2px solid white;
     }
@@ -451,15 +456,27 @@ export default {
       width: 35px;
       height: 35px;
       line-height: 38px;
-      top: -20px;
+      top: -21px;
       left: -21px;
       font-size: 1.3em;
+      border: 2px solid white;
     }
 
     .username-tag {
-      top: 5px;
+      top: calc(40vh + 10px);
+      position: fixed;
       left: 5px;
       letter-spacing: 1px;
+    }
+
+    .info-money-tag {
+      font-size: 1.15em;
+    }
+
+    .bust, .double, .blackjack {
+      right: -20px;
+      left: auto;
+      line-height: 35px;
     }
   }
 </style>

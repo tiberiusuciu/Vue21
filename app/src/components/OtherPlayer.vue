@@ -93,4 +93,25 @@ export default {
         line-height: 60px;
         letter-spacing: 1px;
     }
+
+    @media screen and (max-width: 800px) {
+
+        .other-info {
+            height: 30px;
+            bottom: 13px;
+        }
+        .name {
+            line-height: 30px;
+        }
+        .value {
+            width: 30px;
+            height: 30px;
+            line-height: 27px;
+            border: 2px solid white;
+            font-size: .85em;
+        }
+        .card-layout {
+            margin-left: 75px;
+        }
+    }
 </style>
