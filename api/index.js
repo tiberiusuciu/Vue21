@@ -4,7 +4,7 @@ var io = require('socket.io')(http);
 
 var Game = require('./engine/Game.js');
 
-var game = new Game(8);
+var game = new Game(8, io);
 var id = 0;
 var timer;
 
@@ -20,6 +20,9 @@ io.on('connection', function(socket){
     game.addNewUser(data.form, id, socket.id);
     
     socket.to(data.socketId).emit('playerinfo', id);
+    socket.to(data.socketId).emit('gamephasechange', game.currentPhase);
+    socket.to(data.socketId).emit('dealer', game.dealer);
+    socket.to(data.socketId).emit('assignNextPlayer', game.currentPlayer);
     io.emit('users', game.users);
     
     id++;
@@ -34,6 +37,7 @@ io.on('connection', function(socket){
       clearTimeout(timer);
     }
     io.emit('gamebegintimer', 5);
+    game.currentPhase = 'aboutToStart';
     io.emit('gamephasechange', 'aboutToStart');
     timer = setTimeout(bettingTimeEnded, 5000);
     
@@ -68,6 +72,7 @@ io.on('connection', function(socket){
 
   var bettingTimeEnded = () => {
     timer = null;
+    game.currentPhase = 'dealingCards'
     io.emit('gamephasechange', 'dealingCards');
     game.dealCards(io)
     // game.drawCard();

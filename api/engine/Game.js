@@ -2,12 +2,14 @@ var User = require('./User.js');
 var Deck = require('./Deck.js');
 
 class Game {
-	constructor(deckCount) {
+	constructor(deckCount, io) {
 		this.deck = new Deck(deckCount);
 		this.users = [];
 		this.dealer = new User('Dealer', -1);
 		this.currentPlayer = -1;
 		this.currentPhase = 'waitingbet';
+		this.timer = null;
+		this.io = io;
 		// this.currentUserId = -1;
 		// this.secondsPassed = 0;
 	}
@@ -76,6 +78,7 @@ class Game {
 
 				// House has blackjack
 				if (this.dealer.hands[0].currentValue == 21 && (this.dealer.hands[0].cards[0].charAt(0) === '1' || this.dealer.hands[0].cards[0].charAt(0) === 'J' || this.dealer.hands[0].cards[0].charAt(0) === 'Q' || this.dealer.hands[0].cards[0].charAt(0) === 'K')) {
+					this.currentPhase = 'revealCard';
 					io.emit('gamephasechange', 'revealCard');
 					setTimeout(() => {
 						this.dealerPlay(io);
@@ -101,6 +104,7 @@ class Game {
 							}
 
 							if (this.dealer.hands[0].hasBlackJack) {
+								this.currentPhase = 'revealCard';
 								io.emit('gamephasechange', 'revealCard');
 								setTimeout(() => {
 									this.dealerPlay(io);
@@ -108,23 +112,47 @@ class Game {
 
 							}
 							else {
+								this.currentPhase = 'userplay';
 								io.emit('gamephasechange', 'userplay');
 								io.emit('startUserTimeout', 15000);
 								io.emit('assignNextPlayer', this.findNextPlayer());
+								this.timeoutManagement();
 							}
 						}, 15000)
 						
 					}
 					else {
+						this.currentPhase = 'userplay';
 						io.emit('gamephasechange', 'userplay');
 						io.emit('startUserTimeout', 15000);
 						io.emit('assignNextPlayer', this.findNextPlayer());
+						this.timeoutManagement();
 					}
 				}
 
 				// notify that player ones needs to play
 			}
 		}, 500);
+	}
+
+	timeoutManagement() {
+		console.log('SETTING UP NEW TIMER');
+		if (this.timer !== null) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
+		this.timer = setTimeout(() => {
+			var player = this.users[this.currentPlayer];
+			this.playerHold(player.id, this.io)
+		}, 15000)
+	}
+
+	clearTimer() {
+		console.log('TIMER CLEARED');
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
 	}
 
 	findNextPlayer() {
@@ -140,6 +168,8 @@ class Game {
 	}
 
 	playerHit(playerID, io) {
+		this.clearTimer();
+
 		var player = this.users[this.locatePlayer(playerID)];
 		
 		player.dealCards(this.deck.draw());
@@ -155,6 +185,7 @@ class Game {
 					io.emit('assignNextPlayer', this.findNextPlayer());
 				}
 				else {
+					this.currentPhase = 'revealCard';
 					io.emit('gamephasechange', 'revealCard');
 					startTimer = false;
 					setTimeout(() => {
@@ -170,11 +201,14 @@ class Game {
 		}
 		if (startTimer) {			
 			io.emit('startUserTimeout', 15000);
+			this.timeoutManagement();
 		}
 		io.emit('users', this.users);
 	}
 
 	playerDouble(playerID, io) {
+		this.clearTimer();
+
 		var player = this.users[this.locatePlayer(playerID)];
 		
 		var startTimer = true;
@@ -197,6 +231,7 @@ class Game {
 				io.emit('assignNextPlayer', this.findNextPlayer());
 			}
 			else {
+				this.currentPhase = 'revealCard';
 				io.emit('gamephasechange', 'revealCard');
 				startTimer = false;
 				setTimeout(() => {
@@ -210,13 +245,14 @@ class Game {
 		}
 
 		if (startTimer) {
-			console.log('startingTimer');
 			io.emit('startUserTimeout', 15000);
+			this.timeoutManagement();
 		}
 		io.emit('users', this.users);
 	}
 
 	playerHold(playerID, io) {
+		this.clearTimer();
 		var player = this.users[this.locatePlayer(playerID)];
 		
 		var startTimer = true;
@@ -231,6 +267,7 @@ class Game {
 				io.emit('assignNextPlayer', this.findNextPlayer());
 			}
 			else {
+				this.currentPhase = 'revealCard';
 				io.emit('gamephasechange', 'revealCard');
 				startTimer = false;
 				setTimeout(() => {
@@ -245,12 +282,14 @@ class Game {
 		
 		if (startTimer) {
 			io.emit('startUserTimeout', 15000);
+			this.timeoutManagement();
 		}
 
 		io.emit('users', this.users);
 	}
 
 	playerSplit(playerID, io) {
+		this.clearTimer();
 		// locate the player
 		var player = this.users[this.locatePlayer(playerID)];
 		var currentHand = player.currentHand;
@@ -294,6 +333,7 @@ class Game {
 					player.currentHand = currentHand;
 					io.emit('users', this.users);
 					io.emit('startUserTimeout', 15000);
+					this.timeoutManagement();
 				}, 500)
 			}, 500)
 		}, 500);
@@ -319,6 +359,7 @@ class Game {
 				io.emit('dealer', this.dealer);
 			}
 			else {
+				this.currentPhase = 'giveRewards';
 				io.emit('gamephasechange', 'giveRewards');
 
 				// timeout?
@@ -374,6 +415,7 @@ class Game {
 
 				setTimeout(() => {
 					this.cleanupBoard();
+					this.currentPhase = 'waitingbet';
 					io.emit('gamephasechange', 'waitingbet');
 					io.emit('users', this.users);
 					io.emit('dealer', this.dealer);
@@ -384,6 +426,7 @@ class Game {
 	}
 
 	cleanupBoard() {
+		this.clearTimer();
 		for (var i = 0; i < this.users.length; i++) {
 			this.users[i].hands = [];
 			this.users[i].currentHand = 0;
@@ -414,9 +457,11 @@ class Game {
 		
 		if (player) {
 			// console.log('REMOVING SOMEBODY, here is current list', this.users);
-			
+			player.hasPlayed = true;
+			player.toDelete = true;
 			// check if this player was current player
-			if (this.currentPlayer === player.id) {
+			if (this.users[this.currentPlayer].id === player.id) {
+				this.clearTimer();
 				// remove timer
 				var startTimer = true;
 				console.log('lets look for the next guy');
@@ -426,11 +471,14 @@ class Game {
 				if (nextPlayer >= 0) {
 					console.log('found one!, assigning!');
 					
-					this.currentPlayer = this.users[nextPlayer].id;
+					this.currentPlayer = nextPlayer;
 
 					io.emit('assignNextPlayer', nextPlayer);
 				}
 				else {
+					console.log('found no one, switching to dealer');
+					
+					this.currentPhase = 'revealCard';
 					io.emit('gamephasechange', 'revealCard');
 					startTimer = false;
 					setTimeout(() => {
@@ -440,7 +488,7 @@ class Game {
 				
 				if (startTimer) {
 					console.log('lets restart the timer');
-					
+					this.timeoutManagement();
 					io.emit('startUserTimeout', 15000);
 				}
 	
@@ -448,19 +496,19 @@ class Game {
 			}
 			
 			// remove him
-			for(var i = 0; i < this.users.length; i++){ 
-				if (this.users[i].id === player.id) {
-					this.users[i].toDelete = true;
-				}
-			}
+			// for(var i = 0; i < this.users.length; i++){ 
+			// 	if (this.users[i].id === player.id) {
+			// 		this.users[i].toDelete = true;
+			// 	}
+			// }
 
-			var next = this.findNextPlayer();
-			console.log('this index is next:', next);
+			// var next = this.findNextPlayer();
+			// console.log('this index is next:', next);
 			
-			if (next >= 0) {
-				this.currentPlayer = this.users[next].id;
-				io.emit('assignNextPlayer', next);
-			}
+			// if (next >= 0) {
+			// 	this.currentPlayer = this.users[next].id;
+			// 	io.emit('assignNextPlayer', next);
+			// }
 
 	
 			console.log('DONE, here is the new list', this.users);

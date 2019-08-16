@@ -35,7 +35,7 @@
         </template>
 
 
-        <div class="anouncement" v-if="$store.state.currentUser != -1 && $store.state.users[$store.state.currentUser].id !== $store.state.id && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
+        <div class="anouncement" v-if="$store.state.currentUser != -1 && !isCurrentPlayer() && ($store.state.gamePhase !== 'waitingbet' || $store.state.gamePhase !== 'revealCard' || $store.state.gamePhase !== 'giveRewards')">
             Waiting on {{ $store.state.users[$store.state.currentUser].username }}'s turn
         </div>
     </div>
@@ -48,6 +48,14 @@ export default {
     name: 'dealer',
     components: {
         Card
+    },
+    methods: {
+        isCurrentPlayer() {
+            if (this.$store.state.users.length == 0 || this.$store.state.currentUser == -1) {
+                return false;
+            }
+            return this.$store.state.users[this.$store.state.currentUser].id === this.$store.state.id;
+        }
     },
     computed: {
         transformedValue() {
