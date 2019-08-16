@@ -20,6 +20,7 @@
       <Player />
       <Control v-if="$store.state.currentUser === $store.state.id && $store.state.gamePhase === 'userplay'"/>
       <OtherPlayer />
+      <InsuranceDialog v-if="$store.state.askInsurance" />
     </template>
   </div>
 </template>
@@ -29,6 +30,7 @@ import Player from './components/Player.vue'
 import Dealer from './components/Dealer.vue'
 import Control from './components/Control.vue'
 import OtherPlayer from './components/OtherPlayer.vue'
+import InsuranceDialog from './components/InsuranceDialog.vue'
 
 export default {
   name: 'app',
@@ -36,7 +38,8 @@ export default {
     Player,
     Dealer,
     Control,
-    OtherPlayer
+    OtherPlayer,
+    InsuranceDialog
   },
   methods: {
     sendUserInfo() {

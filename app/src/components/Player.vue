@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div v-if="$store.state.userSecondsLeft > 0" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
+    <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
     </div>
 
     <div v-if="(

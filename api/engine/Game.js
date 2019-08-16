@@ -80,9 +80,44 @@ class Game {
 					}, 500)
 				}
 				else {
-					io.emit('gamephasechange', 'userplay');
-					io.emit('startUserTimeout', 15000);
-					io.emit('assignNextPlayer', this.findNextPlayer());
+					if (this.dealer.hands[0].cards[0].charAt(0) === 'A') {
+						// house has a hand with an ace revealed
+					
+						io.emit('startUserTimeout', 15000);
+						// ask for insurances
+						io.emit('askInsurance', true)
+						setTimeout(() => {
+
+							io.emit('askInsurance', false)
+
+							// removing money from player if said yes to insurance
+							for (var i = 0; i < this.users.length; i++) {
+								var player = this.users[i];
+								if (player.hasbet && player.insuranceAnswer && !player.hands[0].hasBlackJack) {
+									player.money -= player.hands[0].currentBet / 2;
+								}
+							}
+
+							if (this.dealer.hands[0].hasBlackJack) {
+								io.emit('gamephasechange', 'revealCard');
+								setTimeout(() => {
+									this.dealerPlay(io);
+								}, 500)
+
+							}
+							else {
+								io.emit('gamephasechange', 'userplay');
+								io.emit('startUserTimeout', 15000);
+								io.emit('assignNextPlayer', this.findNextPlayer());
+							}
+						}, 15000)
+						
+					}
+					else {
+						io.emit('gamephasechange', 'userplay');
+						io.emit('startUserTimeout', 15000);
+						io.emit('assignNextPlayer', this.findNextPlayer());
+					}
 				}
 
 				// notify that player ones needs to play
@@ -262,6 +297,15 @@ class Game {
 		}, 500);
 	}
 
+	userAnswer(playerID, answer) {
+		// locate the player
+		var player = this.users[this.locatePlayer(playerID)];
+		// asign answer
+		console.log("WE GET A ANSWERE FOR INSRUANCE");
+		
+		player.insuranceAnswer = answer;
+	}
+
 	dealerPlay(io) {
 		this.currentPlayer = -1;
 		io.emit('assignNextPlayer', this.currentPlayer);
@@ -275,24 +319,44 @@ class Game {
 			else {
 				io.emit('gamephasechange', 'giveRewards');
 
-				for (var i = 0; i < this.users.length; i++) {
-					if (this.users[i].hasbet) {
-						var player = this.users[i];
-						var cashStack = 0;
-						for (var j = 0; j < player.hands.length; j++) {
-							if (player.hands[j].currentValue <= 21 && (player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
-								cashStack += player.hands[j].currentBet * 2
-							}
-							if (player.hands[j].currentValue == this.dealer.hands[0].currentValue) {
-								cashStack += player.hands[j].currentBet;
-							}
-							if (player.hands[j].hasBlackJack && !this.dealer.hands[0].hasBlackJack) {
-								cashStack += player.hands[j].currentBet * 2.5;
-							}
+				// timeout?
+
+				if (this.dealer.hands[0].hasBlackJack && this.dealer.hands[0].cards[0].charAt(0) === 'A') {
+					// check all players
+					// assign money
+					for (var i = 0; i < this.users.length; i++) {
+						if (this.users[i].insuranceAnswer && !this.users[i].hands[0].hasBlackJack && this.users[i].hasbet) {
+							this.users[i].money += this.users[i].hands[0].currentBet;
 						}
-						player.money += cashStack;
+						else if (this.users[i].insuranceAnswer && this.users[i].hands[0].hasBlackJack && this.users[i].hasbet) {
+							this.users[i].money += this.users[i].hands[0].currentBet;
+						}
 					}
 				}
+				else {
+					for (var i = 0; i < this.users.length; i++) {
+						if (this.users[i].hasbet) {
+							var player = this.users[i];
+							var cashStack = 0;
+							for (var j = 0; j < player.hands.length; j++) {
+								if (player.hands[j].currentValue <= 21 && (player.hands[j].currentValue > this.dealer.hands[0].currentValue || this.dealer.hands[0].hasBust)) {
+									cashStack += player.hands[j].currentBet * 2
+								}
+								if (player.hands[j].currentValue == this.dealer.hands[0].currentValue) {
+									cashStack += player.hands[j].currentBet;
+								}
+								if (player.hands[j].hasBlackJack && !player.insuranceAnswer) {
+									cashStack += player.hands[j].currentBet * 2;
+								}
+								else if (player.hands[j].hasBlackJack && player.insuranceAnswer) {
+									cashStack += player.hands[j].currentBet * 2.5;
+								}
+							}
+							player.money += cashStack;
+						}
+					}
+				}
+
 
 				io.emit('users', this.users);
 
@@ -312,6 +376,7 @@ class Game {
 			this.users[i].hands = [];
 			this.users[i].currentHand = 0;
 			this.users[i].hasbet = false;
+			this.users[i].insuranceAnswer = false;
 		}
 		this.dealer.hands = [];
 		this.dealer.currentHand = 0;

@@ -55,6 +55,10 @@ io.on('connection', function(socket){
     game.playerHold(data.id, io);
   });
 
+  socket.on('userAnswer', (data) => {
+    game.userAnswer(data.id, data.answer);
+  });
+
   socket.on("disconnect", function() {
       console.log('disconnect');
   })

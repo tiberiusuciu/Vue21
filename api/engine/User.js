@@ -6,6 +6,7 @@ class User {
 		this.currentHand = 0;
 		this.hands = [];
 		this.hasbet = false;
+		this.insuranceAnswer = false;
 	}
 
 	dealCards(newCard) {

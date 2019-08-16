@@ -11,7 +11,7 @@ export default new Vuex.Store({
       username: ""
     },
     socketid: "",
-    socket: io('http://localhost:3000'),
+    socket: io('http://192.168.0.111:3000'),
     id: null,
     bettingAmount: "",
     dealer: {},
@@ -21,6 +21,8 @@ export default new Vuex.Store({
     gamestarttime: 0,
     gamestarttimer: null,
     userSecondsLeft: 0,
+    askInsurance: false,
+    insuranceAnswer: null,
     userTimer: null
   },
   mutations: {
@@ -55,6 +57,9 @@ export default new Vuex.Store({
       state.userSecondsLeft = 0;
       state.socket.emit('userHold', { id: state.id });
     },
+    sendUserAnswer(state) {
+      state.socket.emit('userAnswer', { id: state.id, answer: state.insuranceAnswer });
+    },
     "SOCKET_playerinfo": (state, data) => {
       state.id = data;
     },
@@ -72,6 +77,10 @@ export default new Vuex.Store({
         clearInterval(state.userTimer);
         state.userTimer = null;
         state.userSecondsLeft = 0;
+      }
+
+      if (data === 'waitingbet') {
+        state.insuranceAnswer = null;
       }
       state.gamePhase = data;
     },
@@ -106,12 +115,14 @@ export default new Vuex.Store({
           
           clearInterval(state.userTimer);
           state.userTimer = null;
-          if (state.currentUser === state.id) {
+          if (state.currentUser === state.id && !state.askInsurance) {
             state.socket.emit('userHold', { id: state.id });
           }
         }
       }, 5);
-
+    },
+    "SOCKET_askInsurance": (state, data) => {
+      state.askInsurance = data;
     }
   },
   actions: {
@@ -132,6 +143,9 @@ export default new Vuex.Store({
     },
     onUserHold({commit}) {
       commit('userHold');
+    },
+    onSendUserAnswer({commit}, data) {
+      commit('sendUserAnswer', data);
     }
   }
 })
