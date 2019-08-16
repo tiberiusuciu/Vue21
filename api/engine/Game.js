@@ -44,7 +44,9 @@ class Game {
 					this.users[currentPlayer].dealCards(this.deck.draw());
 					io.emit('users', this.users);
 				}
-				currentPlayer++;
+				do {
+					currentPlayer++;
+				} while (this.users[currentPlayer] && !this.users[currentPlayer].hasbet);
 			}
 			else if (!done && currentPlayer >= this.users.length && !secondDeal) {
 				// dealing for the dealer
