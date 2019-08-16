@@ -143,8 +143,10 @@ class Game {
 		}
 		this.timer = setTimeout(() => {
 			var player = this.users[this.currentPlayer];
-			this.playerHold(player.id, this.io)
-		}, 15000)
+			if (player !== undefined) {
+				this.playerHold(player.id, this.io)
+			}
+		}, 16000)
 	}
 
 	clearTimer() {
