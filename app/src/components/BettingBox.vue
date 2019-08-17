@@ -42,7 +42,7 @@ export default {
       this.$store.state.bettingAmount = parseInt(e.target.value);
     },
     confirmBet() {
-      if (this.$store.state.bettingAmount <= this.userInfo.money) {
+      if (this.$store.state.bettingAmount <= this.userInfo.money && this.$store.state.bettingAmount !== "" && Number.isInteger(this.$store.state.bettingAmount) && this.$store.state.bettingAmount >= 1) {
         this.$store.dispatch('onConfirmUserBet');
         if (this.$store.state.bettingAmount > this.userInfo.money - this.$store.state.bettingAmount) {
             this.$store.state.bettingAmount = 0;
