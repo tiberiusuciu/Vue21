@@ -11,7 +11,8 @@ export default new Vuex.Store({
       username: ""
     },
     socketid: "",
-    socket: io('http://34.219.131.135:3000'),
+    // socket: io('http://34.219.131.135:3000'),
+    socket: io('http://localhost:3000'),
     id: null,
     bettingAmount: "",
     dealer: {},
@@ -59,6 +60,9 @@ export default new Vuex.Store({
     },
     sendUserAnswer(state) {
       state.socket.emit('userAnswer', { id: state.id, answer: state.insuranceAnswer });
+    },
+    playAgain(state) {
+      state.socket.emit('playAgain', { id: state.id });
     },
     "SOCKET_playerinfo": (state, data) => {
       state.id = data;
@@ -147,6 +151,9 @@ export default new Vuex.Store({
     },
     onSendUserAnswer({commit}, data) {
       commit('sendUserAnswer', data);
+    },
+    onPlayAgain({commit}, data) {
+      commit('playAgain');
     }
   }
 })

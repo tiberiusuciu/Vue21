@@ -504,27 +504,17 @@ class Game {
 					// move to the next player
 				}
 			}
-
-			
-			// remove him
-			// for(var i = 0; i < this.users.length; i++){ 
-			// 	if (this.users[i].id === player.id) {
-			// 		this.users[i].toDelete = true;
-			// 	}
-			// }
-
-			// var next = this.findNextPlayer();
-			// console.log('this index is next:', next);
-			
-			// if (next >= 0) {
-			// 	this.currentPlayer = this.users[next].id;
-			// 	io.emit('assignNextPlayer', next);
-			// }
-
 	
 			console.log('DONE, here is the new list', this.users);
 			
 			io.emit('users', this.users);
+		}
+	}
+
+	playAgain(playerID) {
+		var player = this.users[this.locatePlayer(playerID)];
+		if (player) {
+			player.money = 100;
 		}
 	}
 }

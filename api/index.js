@@ -45,7 +45,7 @@ io.on('connection', function(socket){
     io.emit('users', game.users);
     
   });
-
+  
   socket.on('userHit', (data) => {
     game.playerHit(data.id, io);
   });
@@ -58,9 +58,14 @@ io.on('connection', function(socket){
   socket.on('userHold', (data) => {
     game.playerHold(data.id, io);
   });
-
+  
   socket.on('userAnswer', (data) => {
     game.userAnswer(data.id, data.answer);
+  });
+  
+  socket.on('playAgain', (data) => {
+    game.playAgain(data.id);
+    io.emit('users', game.users);
   });
 
   socket.on("disconnect", () => {

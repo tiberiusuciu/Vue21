@@ -9,13 +9,17 @@
       </div>
     </div>
 
-    <div v-if="!(userInfo.money > 0) && !userInfo.hasbet" class="game-over">
+    <!-- <div v-if="!(userInfo.money > 0) && !userInfo.hasbet" class="game-over">
       <div class="game-over-label-area">
         <dir class="game-over-label">
           Game Over
         </dir>
       </div>
       No more money, thank you for playing! Refresh this page to start again!
+    </div> -->
+
+    <div class="game-over-button" v-if="!(userInfo.money > 0) && !userInfo.hasbet" @click="onPlayAgain()">
+      Out of money &middot; Play again
     </div>
 
     <template v-if="userInfo.hasbet && ($store.state.gamePhase === 'userplay' || $store.state.gamePhase === 'dealingCards' || $store.state.gamePhase === 'revealCard' || $store.state.gamePhase === 'giveRewards')">
@@ -74,6 +78,9 @@ export default {
         return false;
       }
       return this.$store.state.users[this.$store.state.currentUser].id === this.$store.state.id;
+    },
+    onPlayAgain() {
+      this.$store.dispatch('onPlayAgain');
     }
   },
   computed: {
@@ -260,6 +267,20 @@ export default {
     animation-duration: 2500ms;
     animation-iteration-count: infinite;
     animation-timing-function: linear; 
+  }
+
+  .game-over-button {
+    background: #11998e;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #38ef7d, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #38ef7d, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    width: fit-content;
+    padding: 20px 65px;
+    margin: auto;
+    border-radius: 35px;
+    font-weight: bold;
+    color: ghostwhite;
+    cursor: pointer;
+    letter-spacing: 1px;
   }
 
   @keyframes spin {
