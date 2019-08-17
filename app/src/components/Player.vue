@@ -9,15 +9,6 @@
       </div>
     </div>
 
-    <!-- <div v-if="!(userInfo.money > 0) && !userInfo.hasbet" class="game-over">
-      <div class="game-over-label-area">
-        <dir class="game-over-label">
-          Game Over
-        </dir>
-      </div>
-      No more money, thank you for playing! Refresh this page to start again!
-    </div> -->
-
     <div class="game-over-button" v-if="!(userInfo.money > 0) && !userInfo.hasbet" @click="onPlayAgain()">
       Out of money &middot; Play again
     </div>
@@ -181,35 +172,6 @@ export default {
     width: fit-content;
   }
 
-  .game-over {
-    color: white;
-    font-weight: normal;
-    letter-spacing: 1px;
-    font-size: 1.5em;
-    width: 500px;
-    margin: auto;
-    padding: 50px;
-    border: 2px solid white;
-    border-radius: 6px;
-    position: relative;
-    user-select: none;
-    /* box-sizing: border-box; */
-  }
-
-  .game-over-label-area {
-    position: absolute;
-    top: -15px;
-    left: 0px;
-    /* padding: 0px 50px; */
-    width: 100%;
-  }
-
-  .game-over-label {
-    background-color: #040;
-    width: 160px;
-    margin: auto;
-  }
-
   .feedback {
     background-color: #050;
     border: 3px solid white;
@@ -259,7 +221,6 @@ export default {
     background: #11998e;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #38ef7d, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #38ef7d, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
   }
 
   .star {

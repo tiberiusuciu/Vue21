@@ -24,7 +24,9 @@ export default {
       this.$store.dispatch('onUserHit');
     },
     double() {
-      this.$store.dispatch('onUserDouble');
+      if (this.userInfo.hands[this.userInfo.currentHand].currentBet <= this.userInfo.money) {
+        this.$store.dispatch('onUserDouble');
+      }
     },
     split() {
       var playerHand = this.userInfo.hands[this.userInfo.currentHand];
