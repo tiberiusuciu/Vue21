@@ -8,7 +8,7 @@
       </div>
     </template>
     <template v-else>
-      <div :class="{'red': card_identity[1] === 'H' || card_identity[1] === 'D', 'showcase': is_showcase}" class="card">
+      <div :class="{'red': card_identity[1] === 'H' || card_identity[1] === 'D' || (card_identity[0] === '1' && (card_identity[2] === 'H' || card_identity[2] === 'D')), 'showcase': is_showcase}" class="card">
           <template v-if="card_identity.length <= 2">
             <span>
                 {{ card_identity[0] }}

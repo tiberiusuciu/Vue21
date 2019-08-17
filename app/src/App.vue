@@ -7,7 +7,7 @@
           <p>Before going any further, please identify yourself with a username</p>
           <div class="username-area input-area">
             <div><i class="fas fa-user"></i></div>
-            <input type="text" placeholder="Username" v-model="$store.state.form.username" @keyup.enter="sendUserInfo" />
+            <input type="text" placeholder="Username" v-model="$store.state.form.username" @keyup.enter="sendUserInfo" autofocus />
           </div>
           <div class="submit-area input-area" @click="sendUserInfo">
             Submit

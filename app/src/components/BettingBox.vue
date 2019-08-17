@@ -15,7 +15,7 @@
                 </div>
                 <div class="betting-area-your-money your-bet">
                     <div class="available-info">Your Bet ($)</div>
-                    <input type="number" class="betting-input" placeholder="Bet here" @keyup="setAmount" :value="$store.state.bettingAmount" />
+                    <input type="number" class="betting-input" placeholder="Bet here" @keyup="setAmount" :value="$store.state.bettingAmount" autofocus />
                 </div>
             </div>
             <div class="betting-confirm">
