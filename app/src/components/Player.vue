@@ -57,11 +57,13 @@
 
 <script>
 import Card from './Card.vue'
+import GameOver from './GameOver.vue'
 
 export default {
   name: 'player',
   components: {
-    Card
+    Card,
+    GameOver
   },
   methods: {
     isCurrentPlayer() {
