@@ -112,21 +112,55 @@ class Game {
 
 							}
 							else {
-								this.currentPhase = 'userplay';
-								io.emit('gamephasechange', 'userplay');
-								io.emit('startUserTimeout', 15000);
-								io.emit('assignNextPlayer', this.findNextPlayer());
-								this.timeoutManagement();
+								var startTimer = true;
+								var nextPlayer = this.findNextPlayer();
+
+								if (nextPlayer < 0) {
+									this.currentPhase = 'revealCard';
+									io.emit('gamephasechange', 'revealCard');
+									startTimer = false;
+									setTimeout(() => {
+										this.dealerPlay(io);
+									}, 500)
+								}
+								
+								if (startTimer) {
+									this.currentPhase = 'userplay';
+									io.emit('gamephasechange', 'userplay');
+									io.emit('startUserTimeout', 15000);
+									io.emit('assignNextPlayer', this.findNextPlayer());
+	
+									this.timeoutManagement();
+								}
+						
+								io.emit('users', this.users);
 							}
 						}, 15000)
 						
 					}
 					else {
-						this.currentPhase = 'userplay';
-						io.emit('gamephasechange', 'userplay');
-						io.emit('startUserTimeout', 15000);
-						io.emit('assignNextPlayer', this.findNextPlayer());
-						this.timeoutManagement();
+						var startTimer = true;
+						var nextPlayer = this.findNextPlayer();
+
+						if (nextPlayer < 0) {
+							this.currentPhase = 'revealCard';
+							io.emit('gamephasechange', 'revealCard');
+							startTimer = false;
+							setTimeout(() => {
+								this.dealerPlay(io);
+							}, 500)
+						}
+						
+						if (startTimer) {
+							this.currentPhase = 'userplay';
+							io.emit('gamephasechange', 'userplay');
+							io.emit('startUserTimeout', 15000);
+							io.emit('assignNextPlayer', this.findNextPlayer());
+
+							this.timeoutManagement();
+						}
+				
+						io.emit('users', this.users);
 					}
 				}
 
@@ -160,7 +194,7 @@ class Game {
 	findNextPlayer() {
 		for (var i = 0; i < this.users.length; i++) {
 			if (this.users[i].hasbet) {
-				if (!this.users[i].hands[this.users[i].currentHand].hasPlayed && !this.users[i].toDelete) {
+				if (!this.users[i].hands[this.users[i].currentHand].hasPlayed && !this.users[i].toDelete && !this.users[i].hands[this.users[i].currentHand].hasBlackJack) {
 					this.currentPlayer = i;
 					return i;
 				}
