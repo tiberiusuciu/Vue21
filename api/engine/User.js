@@ -62,6 +62,7 @@ class User {
 			hasPlayed: false,
 			hasHit: false,
 			hasBust: false,
+			hasHold: false,
 			hasDoubled: false,
 			hasBlackJack: false,
 			instantLose: false,

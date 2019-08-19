@@ -203,18 +203,14 @@ class Game {
 		return -1;
 	}
 
-	playerHit(playerID, io) {
+	moveToNextHandOrPlayer(playerID, io) {
+		io.emit('freezegame', true);
 		this.clearTimer();
-
-		var player = this.users[this.locatePlayer(playerID)];
-		
-		player.dealCards(this.deck.draw());
-		player.hands[player.currentHand].hasHit = true;
-		player.hands[player.currentHand].hasPlayed = true;
-
-		var startTimer = true;
-
-		if (player.hands[player.currentHand].hasBust) {
+		// adding a little bit of delay so that other plays can see what the current player had
+		setTimeout(() => {
+			var startTimer = true;
+			var player = this.users[this.locatePlayer(playerID)];
+			
 			if (player.currentHand + 1 >= player.hands.length) {
 				var nextPlayer = this.findNextPlayer();
 				if (nextPlayer >= 0) {
@@ -234,29 +230,30 @@ class Game {
 				io.emit('users', this.users);
 			}
 			
-		}
-		else if (player.hands[player.currentHand].currentValue === 21) {
-			if (player.currentHand + 1 >= player.hands.length) {
-				var nextPlayer = this.findNextPlayer();
-				if (nextPlayer >= 0) {
-					io.emit('assignNextPlayer', this.findNextPlayer());
-				}
-				else {
-					this.currentPhase = 'revealCard';
-					io.emit('gamephasechange', 'revealCard');
-					startTimer = false;
-					setTimeout(() => {
-						this.dealerPlay(io);
-					}, 500)
-				}
+			if (startTimer) {			
+				io.emit('startUserTimeout', 15000);
+				this.timeoutManagement();
 			}
-			else {
-				player.currentHand++;
-				io.emit('users', this.users);
-			}
-		}
+			io.emit('freezegame', false);
+			io.emit('users', this.users);
+		}, 1000);
+	}
 
-		if (startTimer) {			
+	playerHit(playerID, io) {
+		this.clearTimer();
+
+		var player = this.users[this.locatePlayer(playerID)];
+		
+		player.dealCards(this.deck.draw());
+		player.hands[player.currentHand].hasHit = true;
+		player.hands[player.currentHand].hasPlayed = true;
+
+		io.emit('users', this.users);
+		
+		if (player.hands[player.currentHand].hasBust || player.hands[player.currentHand].currentValue === 21) {			
+			this.moveToNextHandOrPlayer(playerID, io);
+		}
+		else {
 			io.emit('startUserTimeout', 15000);
 			this.timeoutManagement();
 		}
@@ -268,8 +265,6 @@ class Game {
 
 		var player = this.users[this.locatePlayer(playerID)];
 		
-		var startTimer = true;
-
 		// Doubling logic
 		var bettingAmount = player.hands[player.currentHand].currentBet;
 
@@ -280,69 +275,22 @@ class Game {
 		player.hands[player.currentHand].hasPlayed = true;
 		player.hands[player.currentHand].hasDoubled = true;
 
-		// Going directly to next player or hand
-
-		if (player.currentHand + 1 >= player.hands.length) {
-			var nextPlayer = this.findNextPlayer();
-			if (nextPlayer >= 0) {
-				io.emit('assignNextPlayer', this.findNextPlayer());
-			}
-			else {
-				this.currentPhase = 'revealCard';
-				io.emit('gamephasechange', 'revealCard');
-				startTimer = false;
-				setTimeout(() => {
-					this.dealerPlay(io);
-				}, 500)
-			}
-		}
-		else {
-			player.currentHand++;
-			io.emit('users', this.users);
-		}
-
-		if (startTimer) {
-			io.emit('startUserTimeout', 15000);
-			this.timeoutManagement();
-		}
 		io.emit('users', this.users);
+
+		// Going directly to next player or hand
+		this.moveToNextHandOrPlayer(playerID, io);
 	}
 
 	playerHold(playerID, io) {
 		this.clearTimer();
 		var player = this.users[this.locatePlayer(playerID)];
 		
-		var startTimer = true;
-
 		player.hands[player.currentHand].hasPlayed = true;
+		player.hands[player.currentHand].hasHold = true;
+		io.emit('users', this.users);
 
 		// Going directly to next player or hand
-
-		if (player.currentHand + 1 >= player.hands.length) {
-			var nextPlayer = this.findNextPlayer();
-			if (nextPlayer >= 0) {
-				io.emit('assignNextPlayer', this.findNextPlayer());
-			}
-			else {
-				this.currentPhase = 'revealCard';
-				io.emit('gamephasechange', 'revealCard');
-				startTimer = false;
-				setTimeout(() => {
-					this.dealerPlay(io);
-				}, 500)
-			}
-		}
-		else {
-			player.currentHand++;
-			io.emit('users', this.users);
-		}
-		
-		if (startTimer) {
-			io.emit('startUserTimeout', 15000);
-			this.timeoutManagement();
-		}
-
-		io.emit('users', this.users);
+		this.moveToNextHandOrPlayer(playerID, io);
 	}
 
 	playerSplit(playerID, io) {
@@ -365,6 +313,7 @@ class Game {
 			hasPlayed: false,
 			hasHit: false,
 			hasBust: false,
+			hasHold: false,
 			hasDoubled: false,
 			hasBlackJack: false,
 			instantLose: false,
@@ -400,7 +349,6 @@ class Game {
 		// locate the player
 		var player = this.users[this.locatePlayer(playerID)];
 		// asign answer
-		console.log("WE GET A ANSWERE FOR INSRUANCE");
 		if (player !== undefined) {
 			player.insuranceAnswer = answer;
 		}

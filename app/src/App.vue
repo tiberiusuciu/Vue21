@@ -18,7 +18,7 @@
     <template v-if="$store.state.id !== null">
       <Dealer />
       <div class="timer-area">
-        <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
+        <div v-if="$store.state.userSecondsLeft > 0 && !$store.state.askInsurance && !$store.state.isFreeze" class="usertimer" :style="{width: 100 * ($store.state.userSecondsLeft / 15000) + '%'}">
         </div>
       </div>
       <BettingBox />

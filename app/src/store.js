@@ -24,7 +24,8 @@ export default new Vuex.Store({
     userSecondsLeft: 0,
     askInsurance: false,
     insuranceAnswer: null,
-    userTimer: null
+    userTimer: null,
+    isFreeze: false
   },
   mutations: {
     sendUserInfo(state) {
@@ -128,6 +129,9 @@ export default new Vuex.Store({
     },
     "SOCKET_askInsurance": (state, data) => {
       state.askInsurance = data;
+    },
+    "SOCKET_freezegame": (state, data) => {
+      state.isFreeze = data
     }
   },
   actions: {

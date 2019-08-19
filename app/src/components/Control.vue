@@ -1,5 +1,5 @@
 <template>
-  <div class="control" v-if="isCurrentPlayer()">
+  <div class="control" v-if="isCurrentPlayer() && !$store.state.isFreeze">
     <div class="buttoncontrol hit" @click="hit">
       Hit
     </div>
