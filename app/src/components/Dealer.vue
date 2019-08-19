@@ -4,7 +4,7 @@
             Dealer
         </div>
         <div class="timer" v-if="$store.state.gamePhase === 'aboutToStart'">
-            Game starts in {{$store.state.gamestarttime}} seconds
+            Game starts in {{$store.state.gamestarttime}} second<span v-if="$store.state.gamestarttime !== 1">s</span>
         </div>
         
         <template v-if="$store.state.dealer.hands">
