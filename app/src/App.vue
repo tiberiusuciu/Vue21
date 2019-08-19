@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     sendUserInfo() {
+      this.$store.state.form.username = this.$store.state.form.username.trim().substring(0, 8);
       if (this.$store.state.form.username !== "") {
         this.$store.dispatch('onSendUserInfo');
       }
