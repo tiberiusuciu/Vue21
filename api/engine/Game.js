@@ -306,7 +306,20 @@ class Game {
 		var secondCard = player.hands[currentHand].cards[1];
 		player.hands[currentHand].cards = [];
 
-		player.hands.push({
+		// player.hands.push({
+		// 	currentBet: player.hands[currentHand].currentBet,
+		// 	cards: [],
+		// 	currentValue: 0,
+		// 	hasPlayed: false,
+		// 	hasHit: false,
+		// 	hasBust: false,
+		// 	hasHold: false,
+		// 	hasDoubled: false,
+		// 	hasBlackJack: false,
+		// 	instantLose: false,
+		// });
+
+		player.hands.splice(currentHand, 0, {
 			currentBet: player.hands[currentHand].currentBet,
 			cards: [],
 			currentValue: 0,

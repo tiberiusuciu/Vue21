@@ -31,9 +31,10 @@ export default {
     },
     split() {
       var playerHand = this.userInfo.hands[this.userInfo.currentHand];
-      if (playerHand.cards[0].charAt(0) === playerHand.cards[1].charAt(0) && !playerHand.hasHit) {
+      // if (playerHand.cards[0].charAt(0) === playerHand.cards[1].charAt(0) && !playerHand.hasHit) {
+      //   this.$store.dispatch('onUserSplit');
+      // }
         this.$store.dispatch('onUserSplit');
-      }
     },
     hold() {
       this.$store.dispatch('onUserHold');
