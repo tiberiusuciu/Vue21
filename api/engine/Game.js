@@ -235,6 +235,27 @@ class Game {
 			}
 			
 		}
+		else if (player.hands[player.currentHand].currentValue === 21) {
+			if (player.currentHand + 1 >= player.hands.length) {
+				var nextPlayer = this.findNextPlayer();
+				if (nextPlayer >= 0) {
+					io.emit('assignNextPlayer', this.findNextPlayer());
+				}
+				else {
+					this.currentPhase = 'revealCard';
+					io.emit('gamephasechange', 'revealCard');
+					startTimer = false;
+					setTimeout(() => {
+						this.dealerPlay(io);
+					}, 500)
+				}
+			}
+			else {
+				player.currentHand++;
+				io.emit('users', this.users);
+			}
+		}
+
 		if (startTimer) {			
 			io.emit('startUserTimeout', 15000);
 			this.timeoutManagement();
